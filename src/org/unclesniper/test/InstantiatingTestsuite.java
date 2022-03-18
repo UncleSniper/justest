@@ -105,6 +105,21 @@ public class InstantiatingTestsuite<BaseT> extends AbstractSimpleTestsuite<Void,
 		this.reinstantiateForEachTestcase = reinstantiateForEachTestcase;
 	}
 
+	public InstantiatingTestsuite<BaseT> newEach(boolean reinstantiateForEachTestcase) {
+		setReinstantiateForEachTestcase(reinstantiateForEachTestcase);
+		return this;
+	}
+
+	public InstantiatingTestsuite<BaseT> newEach() {
+		setReinstantiateForEachTestcase(true);
+		return this;
+	}
+
+	public InstantiatingTestsuite<BaseT> newOnce() {
+		setReinstantiateForEachTestcase(false);
+		return this;
+	}
+
 	private InstantiationResult<BaseT> newBase(String name) {
 		RefCell<Throwable> except = new RefCell<Throwable>();
 		CapturedOutput capturedOutput;
