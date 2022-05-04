@@ -12,16 +12,25 @@
 	<property name="api.doc.visibility" value="private"/>
 	<property name="javadoc.jre.package.list" location="jre8.packages"/>
 	<property name="javadoc.jre.url" value="http://docs.oracle.com/javase/8/docs/api/"/>
+	<property name="test.src" location="test"/>
+	<property name="test.bin" location="tbin"/>
 
 	<path id="build.classpath">
 		<fileset dir="${lib}" includes="**/*.jar"/>
 		<pathelement path="${bin}"/>
 	</path>
 
+	<path id="test.classpath">
+		<fileset dir="${lib}" includes="**/*.jar"/>
+		<pathelement path="${bin}"/>
+		<pathelement path="${test.bin}"/>
+	</path>
+
 	<target name="init">
 		<mkdir dir="${bin}"/>
 		<mkdir dir="${dist}/lib"/>
 		<mkdir dir="${doc}/api"/>
+		<mkdir dir="${test.bin}"/>
 	</target>
 
 	<target name="compile" depends="init" description="compile the source">
@@ -57,6 +66,19 @@
 		<delete dir="${bin}"/>
 		<delete dir="${dist}"/>
 		<delete dir="${doc}/api"/>
+		<delete dir="${test.bin}"/>
+	</target>
+
+	<target name="compileTests" depends="compile" description="compile the testsuite">
+		<javac srcdir="${test.src}" destdir="${test.bin}" debug="on" includeantruntime="no"
+				classpathref="test.classpath">
+			<compilerarg value="-Xlint:unchecked"/>
+			<compilerarg value="-Xlint:deprecation"/>
+		</javac>
+	</target>
+
+	<target name="test" depends="compileTests" description="run the testsuite">
+		<java classname="org.unclesniper.test.RunAllTests" classpathref="test.classpath" fork="true"/>
 	</target>
 
 </project>
