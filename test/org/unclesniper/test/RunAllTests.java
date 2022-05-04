@@ -11,7 +11,7 @@ public class RunAllTests {
 	public static void main(String[] args) throws Exception {
 		PrintStreamTestResultSink sink = new PrintStreamTestResultSink(System.out);
 		sink.setShowSkipped(true);
-		sink.setShowSkippedDetails(false);
+		sink.setShowSkippedDetails(true);
 		sink.setShowPassed(true);
 		Testable.run(null, sink, RunAllTests.ALL_TESTS);
 		if(sink.getFailedCases() > 0)

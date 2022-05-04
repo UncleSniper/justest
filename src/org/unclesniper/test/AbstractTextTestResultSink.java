@@ -85,6 +85,7 @@ public abstract class AbstractTextTestResultSink implements TestResultSink {
 			indentLevel = 0;
 			lineInitiator = banner = null;
 			dropLineInitiator = false;
+			cleanLine = true;
 		}
 
 		private void prepareLine() throws IOException {
@@ -534,9 +535,9 @@ public abstract class AbstractTextTestResultSink implements TestResultSink {
 		if(error == null)
 			endln();
 		else {
-			thisTextWriter.lineInitiator = ": ";
-			thisTextWriter.dropLineInitiator = true;
+			puts(": ");
 			thisTextWriter.indentLevel = 3;
+			thisTextWriter.cleanLine = false;
 			TestUtils.printStackTrace(error, thisTextWriter);
 			thisTextWriter.clearLine();
 			thisTextWriter.reset();
