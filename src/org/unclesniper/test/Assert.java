@@ -8,4 +8,6 @@ public class Assert {
 		throw new UnconditionalAssertionFailureError(message);
 	}
 
+	public static <SubT extends SuperT, SuperT> void assertSubtype() {}
+
 }
