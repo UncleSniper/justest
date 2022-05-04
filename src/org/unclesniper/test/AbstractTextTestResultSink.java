@@ -238,6 +238,30 @@ public abstract class AbstractTextTestResultSink implements TestResultSink {
 		return builder == null ? null : builder.toString();
 	}
 
+	public int getPassedCases() {
+		return passedCases;
+	}
+
+	public int getSkippedCases() {
+		return skippedCases;
+	}
+
+	public int getFailedCases() {
+		return failedCases;
+	}
+
+	public int getPassedSuites() {
+		return passedSuites;
+	}
+
+	public int getSkippedSuites() {
+		return skippedSuites;
+	}
+
+	public int getFailedSuites() {
+		return failedSuites;
+	}
+
 	protected final void indent(int level) throws IOException {
 		String is = indentString == null ? AbstractTextTestResultSink.DEFAULT_INDENT : indentString;
 		for(; level > 0; --level)

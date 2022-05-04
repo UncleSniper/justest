@@ -81,7 +81,8 @@
 	</target>
 
 	<target name="test" depends="compileTests,res" description="run the testsuite">
-		<java classname="org.unclesniper.test.RunAllTests" classpathref="test.classpath" fork="true"/>
+		<java classname="org.unclesniper.test.RunAllTests" classpathref="test.classpath" fork="true"
+				failonerror="true"/>
 	</target>
 
 </project>
