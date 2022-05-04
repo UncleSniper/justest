@@ -201,7 +201,7 @@ public class InstantiatingTestsuite<BaseT> extends AbstractSimpleTestsuite<Void,
 
 	private void runCase(String name, TestContext context, BaseT base, TestResultSink sink,
 			Testable<? super BaseT> testcase) throws IOException {
-		if(!initializeCase(name, context, base, sink))
+		if(initializeCase(name, context, base, sink))
 			return;
 		testcase.performTest(context, base, sink);
 		finalizeCase(name, context, base, sink);
