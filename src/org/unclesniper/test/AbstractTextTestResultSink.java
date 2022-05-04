@@ -440,8 +440,10 @@ public abstract class AbstractTextTestResultSink implements TestResultSink {
 		if(name != null) {
 			indent(currentLevel);
 			puts(name);
-			++currentLevel;
+			puts(" {");
+			endln();
 			flush();
+			++currentLevel;
 		}
 		stack.addLast(new Frame(name, true, false, levelInitFailures));
 		levelInitFailures = new LinkedList<InitFailure>();
@@ -466,6 +468,7 @@ public abstract class AbstractTextTestResultSink implements TestResultSink {
 		if(name != null) {
 			--currentLevel;
 			indent(currentLevel);
+			puts("} ");
 			puts(name);
 			puts(": ");
 			puts(status.getLocalizedName());
