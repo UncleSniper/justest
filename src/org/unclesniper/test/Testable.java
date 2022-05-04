@@ -9,7 +9,11 @@ public interface Testable<BaseT> {
 	public static void run(TestContext context, TestResultSink sink, Testable<Void> test) throws IOException {
 		if(test == null)
 			throw new IllegalArgumentException("Test must not be null");
+		if(sink != null)
+			sink.beginRun();
 		test.performTest(context == null ? EmptyTestContext.instance : context, null, sink);
+		if(sink != null)
+			sink.endRun();
 	}
 
 }
