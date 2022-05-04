@@ -41,12 +41,15 @@
 		</javac>
 	</target>
 
-	<target name="dist" depends="compile" description="generate the distribution">
+	<target name="res" depends="init" description="copy resources">
 		<copy todir="${binres}">
 			<fileset dir="${res}">
 				<filename name="**/*"/>
 			</fileset>
 		</copy>
+	</target>
+
+	<target name="dist" depends="compile,res" description="generate the distribution">
 		<jar jarfile="${pkgdist}" basedir="${bin}"/>
 		<copy todir="${dist}/lib">
 			<fileset dir="${lib}">
@@ -77,7 +80,7 @@
 		</javac>
 	</target>
 
-	<target name="test" depends="compileTests" description="run the testsuite">
+	<target name="test" depends="compileTests,res" description="run the testsuite">
 		<java classname="org.unclesniper.test.RunAllTests" classpathref="test.classpath" fork="true"/>
 	</target>
 
