@@ -4,6 +4,8 @@ import java.io.IOException;
 
 public interface TestResultSink {
 
+	void beginRun() throws IOException;
+
 	void beginTestcase(String name) throws IOException;
 
 	void endTestcase(String name, TestcaseResult result) throws IOException;
@@ -15,5 +17,7 @@ public interface TestResultSink {
 	void initializationResult(String name, InitializationResult result, boolean required) throws IOException;
 
 	void finalizationResult(String name, InitializationResult result, boolean required) throws IOException;
+
+	void endRun() throws IOException;
 
 }

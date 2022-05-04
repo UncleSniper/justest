@@ -4,8 +4,11 @@ import java.util.Map;
 import java.util.Locale;
 import java.util.HashMap;
 import java.util.ResourceBundle;
+import java.util.MissingResourceException;
 
 public class Localization {
+
+	public static final Localization DEFAULT = new Localization();
 
 	private Locale locale;
 
@@ -92,6 +95,16 @@ public class Localization {
 
 	public ResourceBundle getBundleFromDefaultOr(String name, ClassLoader loader) {
 		return defaultLoader == null ? getBundle(name, loader) : getBundleFromDefault(name);
+	}
+
+	public String getMessage(String key) {
+		if(key == null)
+			throw new IllegalArgumentException("Message key must not be null");
+		ResourceBundle bundle = getBundle(Resources.L10N_BUNDLE, (ClassLoader)null);
+		if(bundle == null)
+			throw new MissingResourceException("No resource bundle for name '" + Resources.L10N_BUNDLE + '\'',
+					Localization.class.getName(), key);
+		return bundle.getString(key);
 	}
 
 	public static String getBundleFor(Class<?> clazz, String name) {

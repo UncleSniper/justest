@@ -23,6 +23,12 @@ public abstract class AbstractTestsuite<BaseT> implements Testable<BaseT> {
 		}
 
 		@Override
+		public void beginRun() throws IOException {
+			if(slave != null)
+				slave.beginRun();
+		}
+
+		@Override
 		public void beginTestcase(String name) throws IOException {
 			if(level >= 0)
 				++level;
@@ -70,6 +76,12 @@ public abstract class AbstractTestsuite<BaseT> implements Testable<BaseT> {
 				throws IOException {
 			if(slave != null)
 				slave.finalizationResult(name, result, required);
+		}
+
+		@Override
+		public void endRun() throws IOException {
+			if(slave != null)
+				slave.endRun();
 		}
 
 	}
