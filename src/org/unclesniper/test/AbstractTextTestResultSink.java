@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.stream.Stream;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import org.unclesniper.test.resource.Localization;
 
 public abstract class AbstractTextTestResultSink implements TestResultSink {
@@ -191,6 +192,10 @@ public abstract class AbstractTextTestResultSink implements TestResultSink {
 
 	private final ThisTextWriter thisTextWriter = new ThisTextWriter();
 
+	private Predicate<StackTraceElement> internalFramePredicate;
+
+	private Function<String, String> internalFrameMapper;
+
 	public AbstractTextTestResultSink() {}
 
 	public String getIndentString() {
@@ -261,6 +266,27 @@ public abstract class AbstractTextTestResultSink implements TestResultSink {
 
 	public int getFailedSuites() {
 		return failedSuites;
+	}
+
+	public Predicate<StackTraceElement> getInternalFramePredicate() {
+		return internalFramePredicate;
+	}
+
+	public void setInternalFramePredicate(Predicate<StackTraceElement> internalFramePredicate) {
+		this.internalFramePredicate = internalFramePredicate;
+	}
+
+	public void setInternalFramePredicate(FramePredicate internalFramePredicate) {
+		this.internalFramePredicate = internalFramePredicate == null ? null
+				: new FramePredicateFramePredicate(internalFramePredicate);
+	}
+
+	public Function<String, String> getInternalFrameMapper() {
+		return internalFrameMapper;
+	}
+
+	public void setInternalFrameMapper(Function<String, String> internalFrameMapper) {
+		this.internalFrameMapper = internalFrameMapper;
 	}
 
 	protected final void indent(int level) throws IOException {
@@ -537,7 +563,7 @@ public abstract class AbstractTextTestResultSink implements TestResultSink {
 			puts(": ");
 			thisTextWriter.indentLevel = 3;
 			thisTextWriter.cleanLine = false;
-			TestUtils.printStackTrace(error, thisTextWriter);
+			TestUtils.printStackTrace(error, thisTextWriter, internalFramePredicate, internalFrameMapper);
 			thisTextWriter.clearLine();
 			thisTextWriter.reset();
 		}

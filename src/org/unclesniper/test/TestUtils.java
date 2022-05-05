@@ -4,6 +4,8 @@ import java.io.PrintStream;
 import java.io.IOException;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 import org.unclesniper.test.resource.Localization;
@@ -104,7 +106,9 @@ public class TestUtils {
 		return builder.toString();
 	}
 
-	public static void printStackTrace(Throwable exception, TextWriter out) throws IOException {
+	public static void printStackTrace(Throwable exception, TextWriter out,
+			Predicate<StackTraceElement> isFrameInternal, Function<String, String> internalFrameMapper)
+					throws IOException {
 		if(exception == null)
 			throw new IllegalArgumentException("Exception must not be null");
 		if(out == null)
@@ -127,12 +131,30 @@ public class TestUtils {
 			out.endln();
 			StackTraceElement[] trace = t.getStackTrace();
 			if(trace != null) {
+				boolean hadExternalFrame = false;
 				for(StackTraceElement frame : trace) {
 					if(frame == null)
 						continue;
+					boolean internal;
+					if(hadExternalFrame)
+						internal = false;
+					else if(isFrameInternal != null && isFrameInternal.test(frame))
+						internal = true;
+					else {
+						internal = false;
+						hadExternalFrame = true;
+					}
+					String line;
+					if(!internal)
+						line = TestUtils.AT_MSG + frame;
+					else if(internalFrameMapper == null)
+						line = null;
+					else
+						line = internalFrameMapper.apply(TestUtils.AT_MSG + frame);
+					if(line == null)
+						continue;
 					out.puts("    ");
-					out.puts(TestUtils.AT_MSG);
-					out.puts(frame.toString());
+					out.puts(line);
 					out.endln();
 				}
 			}

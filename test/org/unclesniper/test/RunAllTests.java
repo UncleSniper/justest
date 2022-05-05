@@ -15,6 +15,8 @@ public class RunAllTests {
 		sink.setShowSkipped(true);
 		sink.setShowSkippedDetails(true);
 		sink.setShowPassed(true);
+		sink.setInternalFramePredicate((frame, qname, pname, uqname, method) ->
+				qname.equals("org.unclesniper.test.Assume") || qname.equals("org.unclesniper.test.Assert"));
 		Testable.run(null, sink, RunAllTests.ALL_TESTS);
 		if(sink.getFailedCases() > 0)
 			System.exit(1);
