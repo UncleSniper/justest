@@ -424,6 +424,7 @@ public abstract class AbstractTextTestResultSink implements TestResultSink {
 			throw new IllegalArgumentException("Testcase result must not be null");
 		if(stack.isEmpty())
 			throw new IllegalStateException("Stack underflow");
+		String path = getCurrentTestPath();
 		Frame top = stack.removeLast();
 		levelInitFailures = top.levelInitFailures;
 		if(top.suite)
@@ -436,10 +437,10 @@ public abstract class AbstractTextTestResultSink implements TestResultSink {
 		countCase(status);
 		switch(status) {
 			case FAILED:
-				failures.add(new Failure(getCurrentTestPath(), result));
+				failures.add(new Failure(path, result));
 				break;
 			case SKIPPED:
-				skips.add(new Failure(getCurrentTestPath(), result));
+				skips.add(new Failure(path, result));
 				break;
 		}
 		boolean shouldShow = shouldShow(status);
