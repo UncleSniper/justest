@@ -517,9 +517,7 @@ public abstract class AbstractTextTestResultSink implements TestResultSink {
 	private void printOutput(Stream<String> output, String banner) throws IOException {
 		if(output == null)
 			return;
-		indent(3);
-		puts(banner);
-		endln();
+		thisTextWriter.banner = banner;
 		thisTextWriter.lineInitiator = "|| ";
 		thisTextWriter.indentLevel = 3;
 		TestUtils.printStream(output, thisTextWriter);

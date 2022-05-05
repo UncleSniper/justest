@@ -5,7 +5,9 @@ public class RunAllTests {
 	private static final Testable<Void> ALL_TESTS = TestBuilders.testsuite("RunAllTests", RunAllTests::new,
 		TestBuilders.testcase("subtypes", RunAllTests::testSubtypes),
 		TestBuilders.testcase("failure", RunAllTests::testFailure),
-		TestBuilders.testcase("skip", RunAllTests::testSkip)
+		TestBuilders.testcase("skip", RunAllTests::testSkip),
+		TestBuilders.testcase("failWithStderr", RunAllTests::testFailWithStderr),
+		TestBuilders.testcase("skipWithStdout", RunAllTests::testSkipWithStdout)
 	);
 
 	public static void main(String[] args) throws Exception {
@@ -28,6 +30,16 @@ public class RunAllTests {
 
 	private void testSkip() {
 		Assume.skip("skipping statically");
+	}
+
+	private void testFailWithStderr() {
+		System.err.println("Failing now!");
+		Assert.fail("dead");
+	}
+
+	private void testSkipWithStdout() {
+		System.out.println("Bailing now!");
+		Assume.skip("sad");
 	}
 
 }
