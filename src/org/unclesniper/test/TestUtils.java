@@ -71,8 +71,8 @@ public class TestUtils {
 		catch(UnsupportedEncodingException uee) {
 			throw new Error("JVM does not support UTF-8!?", uee);
 		}
-		String[] outLines = TestUtils.ENDLN_PAT.split(wholeOut);
-		String[] errLines = TestUtils.ENDLN_PAT.split(wholeErr);
+		String[] outLines = wholeOut.length() == 0 ? new String[0] : TestUtils.ENDLN_PAT.split(wholeOut);
+		String[] errLines = wholeErr.length() == 0 ? new String[0] : TestUtils.ENDLN_PAT.split(wholeErr);
 		return new SimpleCapturedOutput(() -> Stream.of(outLines), () -> Stream.of(errLines));
 	}
 
