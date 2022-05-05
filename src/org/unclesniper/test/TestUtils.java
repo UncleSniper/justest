@@ -129,6 +129,11 @@ public class TestUtils {
 				}
 			}
 			out.endln();
+			if(t instanceof Describeable) {
+				Stream<String> description = ((Describeable)t).describe();
+				if(description != null)
+					TestUtils.printStream(description.map(line -> ">> " + line), out);
+			}
 			StackTraceElement[] trace = t.getStackTrace();
 			if(trace != null) {
 				boolean hadExternalFrame = false;
