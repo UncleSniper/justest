@@ -18,4 +18,8 @@ public class Assume {
 		return new Subject<OutT>(notNull(matcher, "Matcher").match(actual, true), true);
 	}
 
+	public static <InT> Subject<InT> assumeThat(InT actual) {
+		return new Subject<InT>(actual, true);
+	}
+
 }

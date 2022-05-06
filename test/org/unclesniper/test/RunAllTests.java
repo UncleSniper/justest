@@ -7,7 +7,11 @@ public class RunAllTests {
 		TestBuilders.testcase("failure", RunAllTests::testFailure),
 		TestBuilders.testcase("skip", RunAllTests::testSkip),
 		TestBuilders.testcase("failWithStderr", RunAllTests::testFailWithStderr),
-		TestBuilders.testcase("skipWithStdout", RunAllTests::testSkipWithStdout)
+		TestBuilders.testcase("skipWithStdout", RunAllTests::testSkipWithStdout),
+		TestBuilders.testcase("assertInlineEqualYes", RunAllTests::testAssertInlineEqualYes),
+		TestBuilders.testcase("assertInlineEqualNo", RunAllTests::testAssertInlineEqualNo),
+		TestBuilders.testcase("assertFlowEqualYes", RunAllTests::testAssertFlowEqualYes),
+		TestBuilders.testcase("assertFlowEqualNo", RunAllTests::testAssertFlowEqualNo)
 	);
 
 	public static void main(String[] args) throws Exception {
@@ -42,6 +46,22 @@ public class RunAllTests {
 	private void testSkipWithStdout() {
 		System.out.println("Bailing now!");
 		Assume.skip("sad");
+	}
+
+	private void testAssertInlineEqualYes() {
+		Assert.assertThat(3, Assert.equalTo(3));
+	}
+
+	private void testAssertInlineEqualNo() {
+		Assert.assertThat(3, Assert.equalTo(4));
+	}
+
+	private void testAssertFlowEqualYes() {
+		Assert.assertThat(3).is(Assert.equalTo(3));
+	}
+
+	private void testAssertFlowEqualNo() {
+		Assert.assertThat(3).is(Assert.equalTo(4));
 	}
 
 }

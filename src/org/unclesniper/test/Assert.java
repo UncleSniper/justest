@@ -33,4 +33,8 @@ public class Assert {
 		return new Subject<OutT>(notNull(matcher, "Matcher").match(actual, false), false);
 	}
 
+	public static <InT> Subject<InT> assertThat(InT actual) {
+		return new Subject<InT>(actual, false);
+	}
+
 }
