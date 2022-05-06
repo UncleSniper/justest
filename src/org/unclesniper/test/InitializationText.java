@@ -1,13 +1,13 @@
 package org.unclesniper.test;
 
+import static org.unclesniper.test.TestUtils.notNull;
+
 public final class InitializationText {
 
 	private final String text;
 
 	public InitializationText(String text) {
-		if(text == null)
-			throw new IllegalArgumentException("Text must not be null");
-		this.text = text;
+		this.text = notNull(text, "Text");
 	}
 
 	public String getText() {

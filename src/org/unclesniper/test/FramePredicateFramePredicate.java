@@ -2,6 +2,8 @@ package org.unclesniper.test;
 
 import java.util.function.Predicate;
 
+import static org.unclesniper.test.TestUtils.notNull;
+
 public class FramePredicateFramePredicate implements Predicate<StackTraceElement> {
 
 	private FramePredicate predicate;
@@ -20,8 +22,7 @@ public class FramePredicateFramePredicate implements Predicate<StackTraceElement
 
 	@Override
 	public boolean test(StackTraceElement frame) {
-		if(frame == null)
-			throw new IllegalArgumentException("Frame must not be null");
+		notNull(frame, "Frame");
 		if(predicate == null)
 			throw new IllegalStateException("No child predicate set");
 		String qname = frame.getClassName();

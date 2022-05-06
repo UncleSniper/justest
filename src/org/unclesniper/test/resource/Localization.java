@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.ResourceBundle;
 import java.util.MissingResourceException;
 
+import static org.unclesniper.test.TestUtils.notNull;
+
 public class Localization {
 
 	public static final Localization DEFAULT = new Localization();
@@ -98,8 +100,7 @@ public class Localization {
 	}
 
 	public String getMessage(String key) {
-		if(key == null)
-			throw new IllegalArgumentException("Message key must not be null");
+		notNull(key, "Message key");
 		ResourceBundle bundle = getBundle(Resources.L10N_BUNDLE, (ClassLoader)null);
 		if(bundle == null)
 			throw new MissingResourceException("No resource bundle for name '" + Resources.L10N_BUNDLE + '\'',

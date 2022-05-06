@@ -1,5 +1,7 @@
 package org.unclesniper.test;
 
+import static org.unclesniper.test.TestUtils.notNull;
+
 public class KeepGoingInitializer<BaseT> implements Initializer<BaseT> {
 
 	private final Initializer<? super BaseT> initializer;
@@ -7,9 +9,7 @@ public class KeepGoingInitializer<BaseT> implements Initializer<BaseT> {
 	private final boolean keepGoing;
 
 	public KeepGoingInitializer(Initializer<? super BaseT> initializer, boolean keepGoing) {
-		if(initializer == null)
-			throw new IllegalArgumentException("Initializer must not be null");
-		this.initializer = initializer;
+		this.initializer = notNull(initializer, "Initializer");
 		this.keepGoing = keepGoing;
 	}
 

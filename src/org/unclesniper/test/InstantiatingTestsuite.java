@@ -6,6 +6,8 @@ import java.util.LinkedList;
 import java.util.Collections;
 import java.util.stream.Stream;
 
+import static org.unclesniper.test.TestUtils.notNull;
+
 public class InstantiatingTestsuite<BaseT> extends AbstractSimpleTestsuite<Void, BaseT>
 		implements FlowInitializedTestsuite<Void, BaseT, InstantiatingTestsuite<BaseT>> {
 
@@ -40,25 +42,19 @@ public class InstantiatingTestsuite<BaseT> extends AbstractSimpleTestsuite<Void,
 
 	public InstantiatingTestsuite(String name, ObjectFactory<? extends BaseT, ? extends Throwable> constructor) {
 		super(name);
-		if(constructor == null)
-			throw new IllegalArgumentException("Constructor must not be null");
-		this.constructor = constructor;
+		this.constructor = notNull(constructor, "Constructor");
 	}
 
 	public InstantiatingTestsuite(String name, ObjectFactory<? extends BaseT, ? extends Throwable> constructor,
 			Iterable<? extends Testable<? super BaseT>> tests) {
 		super(name, tests);
-		if(constructor == null)
-			throw new IllegalArgumentException("Constructor must not be null");
-		this.constructor = constructor;
+		this.constructor = notNull(constructor, "Constructor");
 	}
 
 	public InstantiatingTestsuite(String name, ObjectFactory<? extends BaseT, ? extends Throwable> constructor,
 			Stream<? extends Testable<? super BaseT>> tests) {
 		super(name, tests);
-		if(constructor == null)
-			throw new IllegalArgumentException("Constructor must not be null");
-		this.constructor = constructor;
+		this.constructor = notNull(constructor, "Constructor");
 	}
 
 	public List<Initializer<? super BaseT>> getInitializers() {

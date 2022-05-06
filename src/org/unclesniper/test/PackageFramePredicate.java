@@ -1,5 +1,7 @@
 package org.unclesniper.test;
 
+import static org.unclesniper.test.TestUtils.notNull;
+
 public class PackageFramePredicate implements FramePredicate {
 
 	private String packageName;
@@ -29,9 +31,7 @@ public class PackageFramePredicate implements FramePredicate {
 	}
 
 	public static String packageOf(Class<?> clazz) {
-		if(clazz == null)
-			throw new IllegalArgumentException("Class must not be null");
-		String name = clazz.getName();
+		String name = notNull(clazz, "Class").getName();
 		int pos = name.lastIndexOf('.');
 		return pos < 0 ? "" : name.substring(0, pos);
 	}

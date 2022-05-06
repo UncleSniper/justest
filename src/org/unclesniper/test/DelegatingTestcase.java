@@ -2,6 +2,8 @@ package org.unclesniper.test;
 
 import java.util.function.Predicate;
 
+import static org.unclesniper.test.TestUtils.notNull;
+
 public class DelegatingTestcase<BaseT> extends AbstractTestcase<BaseT> {
 
 	private final Testcase<? super BaseT> testcase;
@@ -13,9 +15,7 @@ public class DelegatingTestcase<BaseT> extends AbstractTestcase<BaseT> {
 	public DelegatingTestcase(String name, Testcase<? super BaseT> testcase,
 			Predicate<? super Throwable> expectedException, String expectedExceptionName) {
 		super(name, expectedException, expectedExceptionName);
-		if(testcase == null)
-			throw new IllegalArgumentException("Testcase must not be null");
-		this.testcase = testcase;
+		this.testcase = notNull(testcase, "Testcase");
 	}
 
 	@Override

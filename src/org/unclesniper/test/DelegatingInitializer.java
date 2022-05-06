@@ -1,5 +1,7 @@
 package org.unclesniper.test;
 
+import static org.unclesniper.test.TestUtils.notNull;
+
 public class DelegatingInitializer<BaseT> implements Initializer<BaseT> {
 
 	private final Initializer<? super BaseT> initializer;
@@ -11,9 +13,7 @@ public class DelegatingInitializer<BaseT> implements Initializer<BaseT> {
 	}
 
 	public DelegatingInitializer(Initializer<? super BaseT> initializer, Boolean required) {
-		if(initializer == null)
-			throw new IllegalStateException("Initializer must not be null");
-		this.initializer = initializer;
+		this.initializer = notNull(initializer, "Initializer");
 		this.required = required;
 	}
 

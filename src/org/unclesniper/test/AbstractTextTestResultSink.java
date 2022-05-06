@@ -10,6 +10,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import org.unclesniper.test.resource.Localization;
 
+import static org.unclesniper.test.TestUtils.notNull;
+
 public abstract class AbstractTextTestResultSink implements TestResultSink {
 
 	private static final class Frame {
@@ -372,10 +374,7 @@ public abstract class AbstractTextTestResultSink implements TestResultSink {
 	}
 
 	private void initFinalResult(String name, InitializationResult result, boolean required, boolean finalizing) {
-		if(result == null)
-			throw new IllegalArgumentException((finalizing ? "Finalization" : "Initialization")
-					+ " result must not be null");
-		Throwable error = result.getError();
+		Throwable error = notNull(result, finalizing ? "Finalization result" : "Initialization result").getError();
 		if(error == null)
 			return;
 		InitFailure failure = new InitFailure(getCurrentTestPath(), result, required, finalizing);
@@ -446,8 +445,7 @@ public abstract class AbstractTextTestResultSink implements TestResultSink {
 
 	@Override
 	public void endTestcase(String name, TestcaseResult result) throws IOException {
-		if(result == null)
-			throw new IllegalArgumentException("Testcase result must not be null");
+		notNull(result, "Testcase result");
 		if(stack.isEmpty())
 			throw new IllegalStateException("Stack underflow");
 		String path = getCurrentTestPath();
@@ -503,8 +501,7 @@ public abstract class AbstractTextTestResultSink implements TestResultSink {
 
 	@Override
 	public void endTestsuite(String name, TestsuiteResult result) throws IOException {
-		if(result == null)
-			throw new IllegalArgumentException("Testsuite result must not be null");
+		notNull(result, "Testsuite result");
 		if(stack.isEmpty())
 			throw new IllegalStateException("Stack underflow");
 		Frame top = stack.removeLast();

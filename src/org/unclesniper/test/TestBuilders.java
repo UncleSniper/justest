@@ -3,6 +3,8 @@ package org.unclesniper.test;
 import java.util.Objects;
 import java.util.function.Predicate;
 
+import static org.unclesniper.test.TestUtils.notNull;
+
 public class TestBuilders {
 
 	private TestBuilders() {}
@@ -25,34 +27,29 @@ public class TestBuilders {
 	}
 
 	public static <BaseT> Testcase<BaseT> discard(StaticTestcase testcase) {
-		if(testcase == null)
-			throw new IllegalArgumentException("Testcase must not be null");
+		notNull(testcase, "Testcase");
 		return (base, context) -> testcase.performTest(context);
 	}
 
 	public static <BaseT> Testcase<BaseT> discard(ContextlessTestcase<? super BaseT> testcase) {
-		if(testcase == null)
-			throw new IllegalArgumentException("Testcase must not be null");
+		notNull(testcase, "Testcase");
 		return (base, context) -> testcase.performTest(base);
 	}
 
 	public static <BaseT> Testcase<BaseT> discard(StaticContextlessTestcase testcase) {
-		if(testcase == null)
-			throw new IllegalArgumentException("Testcase must not be null");
+		notNull(testcase, "Testcase");
 		return (base, context) -> testcase.performTest();
 	}
 
 	public static <BaseT> ContextInitializer<BaseT> discard(ContextlessInitializer<? super BaseT> initializer) {
-		if(initializer == null)
-			throw new IllegalArgumentException("Initializer must not be null");
+		notNull(initializer, "Initializer");
 		return (context, base) -> initializer.initializeBase(base);
 	}
 
 	public static <ExceptionT extends Throwable> Predicate<ExceptionT> exception(Class<? extends ExceptionT> type,
 			Predicate<String> message) {
 		return thrown -> {
-			if(thrown == null)
-				throw new IllegalArgumentException("Exception cannot be null");
+			notNull(thrown, "Exception");
 			if(type != null && !type.isInstance(thrown))
 				return false;
 			if(message != null && !message.test(thrown.getMessage()))
@@ -79,8 +76,7 @@ public class TestBuilders {
 	}
 
 	public static Predicate<String> startsWith(String prefix) {
-		if(prefix == null)
-			throw new IllegalArgumentException("Prefix must not be null");
+		notNull(prefix, "Prefix");
 		return subject -> subject != null && subject.startsWith(prefix);
 	}
 
@@ -90,8 +86,7 @@ public class TestBuilders {
 
 	public static <BaseT> Testcase<BaseT> expect(Testcase<? super BaseT> testcase,
 			Predicate<? super Throwable> expectedException, String expectedExceptionName) {
-		if(testcase == null)
-			throw new IllegalArgumentException("Testcase must not be null");
+		notNull(testcase, "Testcase");
 		return (base, context) -> {
 			Throwable thrown;
 			try {
@@ -107,8 +102,7 @@ public class TestBuilders {
 
 	public static StaticTestcase expect(StaticTestcase testcase,
 			Predicate<? super Throwable> expectedException, String expectedExceptionName) {
-		if(testcase == null)
-			throw new IllegalArgumentException("Testcase must not be null");
+		notNull(testcase, "Testcase");
 		return context -> {
 			Throwable thrown;
 			try {
@@ -124,8 +118,7 @@ public class TestBuilders {
 
 	public static <BaseT> ContextlessTestcase<BaseT> expect(ContextlessTestcase<? super BaseT> testcase,
 			Predicate<? super Throwable> expectedException, String expectedExceptionName) {
-		if(testcase == null)
-			throw new IllegalArgumentException("Testcase must not be null");
+		notNull(testcase, "Testcase");
 		return base -> {
 			Throwable thrown;
 			try {
@@ -141,8 +134,7 @@ public class TestBuilders {
 
 	public static StaticContextlessTestcase expect(StaticContextlessTestcase testcase,
 			Predicate<? super Throwable> expectedException, String expectedExceptionName) {
-		if(testcase == null)
-			throw new IllegalArgumentException("Testcase must not be null");
+		notNull(testcase, "Testcase");
 		return () -> {
 			Throwable thrown;
 			try {
@@ -309,20 +301,17 @@ public class TestBuilders {
 	// ===== end expect()
 
 	public static <BaseT> ContextInitializer<BaseT> discardInit(ContextlessInitializer<? super BaseT> initializer) {
-		if(initializer == null)
-			throw new IllegalArgumentException("Initializer must not be null");
+		notNull(initializer, "Initializer");
 		return (context, base) -> initializer.initializeBase(base);
 	}
 
 	public static <BaseT> ContextInitializer<BaseT> discardInit(StaticContextInitializer initializer) {
-		if(initializer == null)
-			throw new IllegalArgumentException("Initializer must not be null");
+		notNull(initializer, "Initializer");
 		return (context, base) -> initializer.initializeEnvironment(context);
 	}
 
 	public static <BaseT> ContextInitializer<BaseT> discardInit(StaticContextlessInitializer initializer) {
-		if(initializer == null)
-			throw new IllegalArgumentException("Initializer must not be null");
+		notNull(initializer, "Initializer");
 		return (context, base) -> initializer.initializeEnvironment();
 	}
 

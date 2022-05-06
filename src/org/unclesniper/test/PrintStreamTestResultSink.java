@@ -2,6 +2,8 @@ package org.unclesniper.test;
 
 import java.io.PrintStream;
 
+import static org.unclesniper.test.TestUtils.notNull;
+
 public class PrintStreamTestResultSink extends AbstractTextTestResultSink {
 
 	private PrintStream stream;
@@ -18,35 +20,34 @@ public class PrintStreamTestResultSink extends AbstractTextTestResultSink {
 		this.stream = stream;
 	}
 
-	@Override
-	protected void puts(String str) {
-		if(str == null)
-			throw new IllegalArgumentException("String to write must not be null");
+	private void requireStream() {
 		if(stream == null)
 			throw new IllegalStateException("No output stream set");
+	}
+
+	@Override
+	protected void puts(String str) {
+		notNull(str, "String to write");
+		requireStream();
 		stream.print(str);
 	}
 
 	@Override
 	protected void putch(char[] chars, int offset, int length) {
-		if(chars == null)
-			throw new IllegalArgumentException("Character array must not be null");
-		if(stream == null)
-			throw new IllegalStateException("No output stream set");
+		notNull(chars, "Character array");
+		requireStream();
 		stream.print(String.valueOf(chars, offset, length));
 	}
 
 	@Override
 	protected void endln() {
-		if(stream == null)
-			throw new IllegalStateException("No output stream set");
+		requireStream();
 		stream.println();
 	}
 
 	@Override
 	protected void flush() {
-		if(stream == null)
-			throw new IllegalStateException("No output stream set");
+		requireStream();
 		stream.flush();
 	}
 

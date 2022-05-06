@@ -33,8 +33,7 @@ public class TestUtils {
 	@SuppressWarnings("unchecked")
 	public static <ExceptionT extends Throwable> CapturedOutput captureOutput(Action<? extends ExceptionT> action,
 			ExceptionHandler<? extends ExceptionT> exceptionHandler) throws ExceptionT {
-		if(action == null)
-			throw new IllegalArgumentException("Action must not be null");
+		notNull(action, "Action");
 		ByteArrayOutputStream outBAOS = new ByteArrayOutputStream(), errBAOS = new ByteArrayOutputStream();
 		PrintStream outPS, errPS;
 		try {
@@ -96,9 +95,7 @@ public class TestUtils {
 	}
 
 	public static String padLeft(String str, char padding, int width) {
-		if(str == null)
-			throw new IllegalArgumentException("String must not be null");
-		int length = str.length();
+		int length = notNull(str, "String").length();
 		StringBuilder builder = new StringBuilder();
 		for(; length < width; ++length)
 			builder.append(padding);
@@ -109,11 +106,8 @@ public class TestUtils {
 	public static void printStackTrace(Throwable exception, TextWriter out,
 			Predicate<StackTraceElement> isFrameInternal, Function<String, String> internalFrameMapper)
 					throws IOException {
-		if(exception == null)
-			throw new IllegalArgumentException("Exception must not be null");
-		if(out == null)
-			throw new IllegalArgumentException("Output writer must not be null");
-		Throwable t = exception;
+		Throwable t = notNull(exception, "Exception");
+		notNull(out, "Output writer");
 		do {
 			if(t != exception)
 				out.puts(TestUtils.CAUSED_BY_MSG);
@@ -168,8 +162,7 @@ public class TestUtils {
 	}
 
 	public static void printStream(Stream<String> lines, TextWriter out) throws IOException {
-		if(out == null)
-			throw new IllegalArgumentException("Output writer must not be null");
+		notNull(out, "Output writer");
 		if(lines == null)
 			return;
 		try {
@@ -188,6 +181,21 @@ public class TestUtils {
 		catch(WrappedIOException wioe) {
 			throw (IOException)wioe.getCause();
 		}
+	}
+
+	public static String describeObject(Object object) {
+		if(object == null)
+			return "<null>";
+		String str = object.toString();
+		if(str != null)
+			return str;
+		return "<object of type " + object.getClass().getName() + " whose toString() returned null>";
+	}
+
+	public static <T> T notNull(T value, String name) {
+		if(value == null)
+			throw new IllegalArgumentException(name + " must not be null");
+		return value;
 	}
 
 }

@@ -1,5 +1,7 @@
 package org.unclesniper.test;
 
+import static org.unclesniper.test.TestUtils.notNull;
+
 public class SimpleInitializer<BaseT> implements Initializer<BaseT> {
 
 	private final ContextInitializer<? super BaseT> initializer;
@@ -11,9 +13,7 @@ public class SimpleInitializer<BaseT> implements Initializer<BaseT> {
 	}
 
 	public SimpleInitializer(ContextInitializer<? super BaseT> initializer, boolean required) {
-		if(initializer == null)
-			throw new IllegalArgumentException("Initializer must not be null");
-		this.initializer = initializer;
+		this.initializer = notNull(initializer, "Initializer");
 		this.required = required;
 	}
 
