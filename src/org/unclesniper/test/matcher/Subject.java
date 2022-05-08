@@ -1,7 +1,7 @@
 package org.unclesniper.test.matcher;
 
 import java.util.Comparator;
-import org.unclesniper.test.Assert;
+import org.unclesniper.test.Matchers;
 
 import static org.unclesniper.test.TestUtils.notNull;
 
@@ -33,15 +33,15 @@ public class Subject<T> {
 	}
 
 	public Subject<T> isEqualTo(T expected) {
-		return is(Assert.equalTo(expected));
+		return is(Matchers.equalTo(expected));
 	}
 
 	public Subject<T> isNotEqualTo(T unexpected) {
-		return is(Assert.notEqualTo(unexpected));
+		return is(Matchers.notEqualTo(unexpected));
 	}
 
 	public Subject<T> isOrderEqualTo(T expected, Comparator<? super T> comparator) {
-		return is(Assert.orderEqualTo(expected, comparator));
+		return is(Matchers.orderEqualTo(expected, comparator));
 	}
 
 	public <B extends Comparable<? super T>> Subject<T> isOrderEqualTo(B expected) {
@@ -49,7 +49,7 @@ public class Subject<T> {
 	}
 
 	public Subject<T> isOrderUnequalTo(T expected, Comparator<? super T> comparator) {
-		return is(Assert.orderUnequalTo(expected, comparator));
+		return is(Matchers.orderUnequalTo(expected, comparator));
 	}
 
 	public <B extends Comparable<? super T>> Subject<T> isOrderUnequalTo(B expected) {
@@ -57,7 +57,7 @@ public class Subject<T> {
 	}
 
 	public Subject<T> isLessThan(T bound, Comparator<? super T> comparator) {
-		return is(Assert.lessThan(bound, comparator));
+		return is(Matchers.lessThan(bound, comparator));
 	}
 
 	public <B extends Comparable<? super T>> Subject<T> isLessThan(B bound) {
@@ -65,7 +65,7 @@ public class Subject<T> {
 	}
 
 	public Subject<T> isLessOrEqual(T bound, Comparator<? super T> comparator) {
-		return is(Assert.lessOrEqual(bound, comparator));
+		return is(Matchers.lessOrEqual(bound, comparator));
 	}
 
 	public <B extends Comparable<? super T>> Subject<T> isLessOrEqual(B bound) {
@@ -73,7 +73,7 @@ public class Subject<T> {
 	}
 
 	public Subject<T> isGreaterThan(T bound, Comparator<? super T> comparator) {
-		return is(Assert.greaterThan(bound, comparator));
+		return is(Matchers.greaterThan(bound, comparator));
 	}
 
 	public <B extends Comparable<? super T>> Subject<T> isGreaterThan(B bound) {
@@ -81,7 +81,7 @@ public class Subject<T> {
 	}
 
 	public Subject<T> isGreaterOrEqual(T bound, Comparator<? super T> comparator) {
-		return is(Assert.greaterOrEqual(bound, comparator));
+		return is(Matchers.greaterOrEqual(bound, comparator));
 	}
 
 	public <B extends Comparable<? super T>> Subject<T> isGreaterOrEqual(B bound) {
