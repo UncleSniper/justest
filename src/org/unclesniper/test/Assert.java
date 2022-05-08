@@ -45,7 +45,7 @@ public class Assert {
 	ToIntBiFunction<? super SubjectT, ? super BoundT> comparatorFromComparable() {
 		return (a, b) -> {
 			if(a == null)
-				throw new CompareMatcher.ComparisonNullPointerException("Attemped to call "
+				throw new CompareMatcher.ComparisonNullPointerException("Attempted to call "
 						+ "Comparable.compareTo() on null");
 			return a.compareTo(b);
 		};
