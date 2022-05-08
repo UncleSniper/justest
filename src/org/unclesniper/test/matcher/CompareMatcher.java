@@ -6,6 +6,18 @@ import static org.unclesniper.test.TestUtils.notNull;
 
 public class CompareMatcher<SubjectT, BoundT> implements Matcher<SubjectT, SubjectT> {
 
+	public static class ComparisonNullPointerException extends IllegalArgumentException {
+
+		public ComparisonNullPointerException(String message) {
+			super(message);
+		}
+
+		public ComparisonNullPointerException(String message, Throwable cause) {
+			super(message, cause);
+		}
+
+	}
+
 	private final ToIntBiFunction<? super SubjectT, ? super BoundT> comparator;
 
 	private final BoundT bound;
@@ -33,14 +45,28 @@ public class CompareMatcher<SubjectT, BoundT> implements Matcher<SubjectT, Subje
 
 	@Override
 	public SubjectT match(SubjectT actual, boolean assume) {
-		int actualRelation = comparator.applyAsInt(actual, bound);
-		if(relation.isSatisfiedBy(actualRelation))
+		Throwable comparisonException = null;
+		int actualRelation = 0;
+		try {
+			actualRelation = comparator.applyAsInt(actual, bound);
+		}
+		catch(NullPointerException npe) {
+			if(actual == null || bound == null)
+				comparisonException = new ComparisonNullPointerException("Calling comparator with null argument "
+						+ "caused NullPointerException", npe);
+			else
+				comparisonException = npe;
+		}
+		catch(Throwable t) {
+			comparisonException = t;
+		}
+		if(comparisonException == null && relation.isSatisfiedBy(actualRelation))
 			return actual;
-		CompareInfo info = new CompareInfo(bound, actual, relation);
+		CompareInfo info = new CompareInfo(bound, actual, relation, comparisonException);
 		if(assume)
-			throw new CompareAssumptionFailureError(info);
+			throw new CompareAssumptionFailureError(info, comparisonException);
 		else
-			throw new CompareAssertionFailureError(info);
+			throw new CompareAssertionFailureError(info, comparisonException);
 	}
 
 }

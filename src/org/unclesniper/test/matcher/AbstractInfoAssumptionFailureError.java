@@ -9,7 +9,11 @@ public abstract class AbstractInfoAssumptionFailureError extends AssumptionFailu
 	private final Info info;
 
 	public AbstractInfoAssumptionFailureError(Info info) {
-		super(notNull(info, "Info").makeMessage(), info.makeDescription());
+		this(info, null);
+	}
+
+	public AbstractInfoAssumptionFailureError(Info info, Throwable cause) {
+		super(notNull(info, "Info").makeMessage(), info.makeDescription(), cause);
 		this.info = info;
 	}
 

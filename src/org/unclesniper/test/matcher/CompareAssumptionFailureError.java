@@ -6,6 +6,10 @@ public class CompareAssumptionFailureError extends AbstractInfoAssumptionFailure
 		super(info);
 	}
 
+	public CompareAssumptionFailureError(CompareInfo info, Throwable cause) {
+		super(info, cause);
+	}
+
 	@Override
 	public CompareInfo getInfo() {
 		return (CompareInfo)super.getInfo();

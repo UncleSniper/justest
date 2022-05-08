@@ -9,7 +9,11 @@ public abstract class AbstractInfoAssertionFailureError extends AssertionFailure
 	private final Info info;
 
 	public AbstractInfoAssertionFailureError(Info info) {
-		super(notNull(info, "Info").makeMessage(), info.makeDescription());
+		this(info, null);
+	}
+
+	public AbstractInfoAssertionFailureError(Info info, Throwable cause) {
+		super(notNull(info, "Info").makeMessage(), info.makeDescription(), cause);
 		this.info = info;
 	}
 

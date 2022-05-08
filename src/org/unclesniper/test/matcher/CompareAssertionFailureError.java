@@ -6,6 +6,10 @@ public class CompareAssertionFailureError extends AbstractInfoAssertionFailureEr
 		super(info);
 	}
 
+	public CompareAssertionFailureError(CompareInfo info, Throwable cause) {
+		super(info, cause);
+	}
+
 	@Override
 	public CompareInfo getInfo() {
 		return (CompareInfo)super.getInfo();

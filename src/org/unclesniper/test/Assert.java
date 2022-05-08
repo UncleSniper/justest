@@ -1,6 +1,7 @@
 package org.unclesniper.test;
 
 import java.util.Comparator;
+import java.util.function.ToIntBiFunction;
 import org.unclesniper.test.matcher.Matcher;
 import org.unclesniper.test.matcher.Subject;
 import org.unclesniper.test.matcher.EqualMatcher;
@@ -40,6 +41,16 @@ public class Assert {
 		return new Subject<InT>(actual, false);
 	}
 
+	private static <BoundT, SubjectT extends Comparable<? super BoundT>>
+	ToIntBiFunction<? super SubjectT, ? super BoundT> comparatorFromComparable() {
+		return (a, b) -> {
+			if(a == null)
+				throw new CompareMatcher.ComparisonNullPointerException("Attemped to call "
+						+ "Comparable.compareTo() on null");
+			return a.compareTo(b);
+		};
+	}
+
 	public static <SubjectT> Matcher<SubjectT, SubjectT> orderEqualTo(SubjectT expected,
 			Comparator<? super SubjectT> comparator) {
 		return new CompareMatcher<SubjectT, SubjectT>(notNull(comparator, "Comparator")::compare, expected,
@@ -48,7 +59,8 @@ public class Assert {
 
 	public static <BoundT, SubjectT extends Comparable<? super BoundT>>
 	Matcher<SubjectT, SubjectT> orderEqualTo(BoundT expected) {
-		return new CompareMatcher<SubjectT, BoundT>(Comparable::compareTo, expected, OrderConstraint.EQUAL);
+		return new CompareMatcher<SubjectT, BoundT>(Assert.comparatorFromComparable(), expected,
+				OrderConstraint.EQUAL);
 	}
 
 	public static <SubjectT> Matcher<SubjectT, SubjectT> orderUnequalTo(SubjectT expected,
@@ -59,7 +71,8 @@ public class Assert {
 
 	public static <BoundT, SubjectT extends Comparable<? super BoundT>>
 	Matcher<SubjectT, SubjectT> orderUnequalTo(BoundT expected) {
-		return new CompareMatcher<SubjectT, BoundT>(Comparable::compareTo, expected, OrderConstraint.UNEQUAL);
+		return new CompareMatcher<SubjectT, BoundT>(Assert.comparatorFromComparable(), expected,
+				OrderConstraint.UNEQUAL);
 	}
 
 	public static <SubjectT> Matcher<SubjectT, SubjectT> lessThan(SubjectT bound,
@@ -70,7 +83,8 @@ public class Assert {
 
 	public static <BoundT, SubjectT extends Comparable<? super BoundT>>
 	Matcher<SubjectT, SubjectT> lessThan(BoundT bound) {
-		return new CompareMatcher<SubjectT, BoundT>(Comparable::compareTo, bound, OrderConstraint.LESS);
+		return new CompareMatcher<SubjectT, BoundT>(Assert.comparatorFromComparable(), bound,
+				OrderConstraint.LESS);
 	}
 
 	public static <SubjectT> Matcher<SubjectT, SubjectT> lessOrEqual(SubjectT bound,
@@ -81,7 +95,8 @@ public class Assert {
 
 	public static <BoundT, SubjectT extends Comparable<? super BoundT>>
 	Matcher<SubjectT, SubjectT> lessOrEqual(BoundT bound) {
-		return new CompareMatcher<SubjectT, BoundT>(Comparable::compareTo, bound, OrderConstraint.LESS_EQUAL);
+		return new CompareMatcher<SubjectT, BoundT>(Assert.comparatorFromComparable(), bound,
+				OrderConstraint.LESS_EQUAL);
 	}
 
 	public static <SubjectT> Matcher<SubjectT, SubjectT> greaterThan(SubjectT bound,
@@ -92,7 +107,8 @@ public class Assert {
 
 	public static <BoundT, SubjectT extends Comparable<? super BoundT>>
 	Matcher<SubjectT, SubjectT> greaterThan(BoundT bound) {
-		return new CompareMatcher<SubjectT, BoundT>(Comparable::compareTo, bound, OrderConstraint.GREATER);
+		return new CompareMatcher<SubjectT, BoundT>(Assert.comparatorFromComparable(), bound,
+				OrderConstraint.GREATER);
 	}
 
 	public static <SubjectT> Matcher<SubjectT, SubjectT> greaterOrEqual(SubjectT bound,
@@ -103,7 +119,8 @@ public class Assert {
 
 	public static <BoundT, SubjectT extends Comparable<? super BoundT>>
 	Matcher<SubjectT, SubjectT> greaterOrEqual(BoundT bound) {
-		return new CompareMatcher<SubjectT, BoundT>(Comparable::compareTo, bound, OrderConstraint.GREATER_EQUAL);
+		return new CompareMatcher<SubjectT, BoundT>(Assert.comparatorFromComparable(), bound,
+				OrderConstraint.GREATER_EQUAL);
 	}
 
 }
