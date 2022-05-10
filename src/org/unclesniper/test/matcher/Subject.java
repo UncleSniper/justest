@@ -24,6 +24,10 @@ public class Subject<T> {
 		return new Subject<OutT>(notNull(matcher, "Matcher").match(subject, assume), assume);
 	}
 
+	public <OutT> Subject<OutT> that(Matcher<? super T, ? extends OutT> matcher) {
+		return is(matcher);
+	}
+
 	public <OutT> Subject<OutT> andIs(Matcher<? super T, ? extends OutT> matcher) {
 		return is(matcher);
 	}
