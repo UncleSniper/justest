@@ -49,7 +49,7 @@ public class CollectionDeepCompareFamily implements DeepCompareFamily {
 			return DeepEquals.ORDERED_COLLECTION_DEEP_COMPARER;
 		else
 			return (a2, b2, seen, config) -> DeepEquals.deepEqualsUnorderedCollection((Collection)a2,
-					(Collection)b2, seen,config, symmetricEquality);
+					(Collection)b2, seen, config, symmetricEquality);
 	}
 
 }

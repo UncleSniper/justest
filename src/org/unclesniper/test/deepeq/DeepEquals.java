@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.SortedSet;
+import java.util.SortedMap;
 import java.util.LinkedList;
 import java.util.Collection;
 
@@ -65,6 +66,7 @@ public class DeepEquals {
 		DEEP_COMPARE_FAMILIES = new LinkedList<DeepCompareFamily>();
 		DEEP_COMPARE_FAMILIES.add(DeepEquals::tryDeepEqualsObjectArray);
 		DEEP_COMPARE_FAMILIES.add(new CollectionDeepCompareFamily());
+		DEEP_COMPARE_FAMILIES.add(new MapDeepCompareFamily());
 	}
 
 	public static boolean deepEquals(Object a, Object b, DeepCompareConfig config) {
@@ -245,6 +247,15 @@ public class DeepEquals {
 		return obj instanceof Queue
 				|| obj instanceof List
 				|| obj instanceof SortedSet;
+	}
+
+	public static boolean deepEqualsMap(Map<?, ?> a, Map<?, ?> b, Set<DeepComparePair> seen,
+			DeepCompareConfig config, boolean shortCircuitSorted) {
+		Set<?> aEntries = notNull(a, "Map A").entrySet();
+		Set<?> bEntries = notNull(b, "Map B").entrySet();
+		if(shortCircuitSorted && a instanceof SortedMap && b instanceof SortedMap)
+			return DeepEquals.deepEqualsOrderedCollection(aEntries, bEntries, seen, config);
+		return DeepEquals.deepEquals(aEntries, bEntries, seen, config);
 	}
 
 }
