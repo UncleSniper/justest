@@ -53,6 +53,9 @@ public class DeepEquals {
 	public static final DeepComparer ORDERED_COLLECTION_DEEP_COMPARER = (a, b, seen, config)
 			-> DeepEquals.deepEqualsOrderedCollection((Collection)a, (Collection)b, seen, config);
 
+	public static final DeepComparer MAP_ENTRY_DEEP_COMPARER = (a, b, seen, config)
+			-> DeepEquals.deepEqualsMapEntry((Map.Entry)a, (Map.Entry)b, seen, config);
+
 	static {
 		DEEP_COMPARERS = new HashMap<Class<?>, DeepComparer>();
 		DEEP_COMPARERS.put(boolean[].class, BOOLEAN_ARRAY_DEEP_COMPARER);
@@ -67,6 +70,7 @@ public class DeepEquals {
 		DEEP_COMPARE_FAMILIES.add(DeepEquals::tryDeepEqualsObjectArray);
 		DEEP_COMPARE_FAMILIES.add(new CollectionDeepCompareFamily());
 		DEEP_COMPARE_FAMILIES.add(new MapDeepCompareFamily());
+		DEEP_COMPARE_FAMILIES.add(DeepEquals::tryDeepEqualsMapEntry);
 	}
 
 	public static boolean deepEquals(Object a, Object b, DeepCompareConfig config) {
@@ -256,6 +260,18 @@ public class DeepEquals {
 		if(shortCircuitSorted && a instanceof SortedMap && b instanceof SortedMap)
 			return DeepEquals.deepEqualsOrderedCollection(aEntries, bEntries, seen, config);
 		return DeepEquals.deepEquals(aEntries, bEntries, seen, config);
+	}
+
+	public static boolean deepEqualsMapEntry(Map.Entry<?, ?> a, Map.Entry<?, ?> b, Set<DeepComparePair> seen,
+			DeepCompareConfig config) {
+		notNull(a, "Map entry A");
+		notNull(b, "Map entry B");
+		return DeepEquals.deepEquals(a.getKey(), b.getKey(), seen, config)
+				&& DeepEquals.deepEquals(a.getValue(), b.getValue(), seen, config);
+	}
+
+	public static DeepComparer tryDeepEqualsMapEntry(Object a, Object b) {
+		return a instanceof Map.Entry && b instanceof Map.Entry ? DeepEquals.MAP_ENTRY_DEEP_COMPARER : null;
 	}
 
 }
