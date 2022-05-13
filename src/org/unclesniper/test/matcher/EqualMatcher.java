@@ -8,6 +8,10 @@ public class EqualMatcher<SubjectT> implements Matcher<SubjectT, SubjectT> {
 
 	private final boolean negated;
 
+	public EqualMatcher(SubjectT expected) {
+		this(expected, false);
+	}
+
 	public EqualMatcher(SubjectT expected, boolean negated) {
 		this.expected = expected;
 		this.negated = negated;

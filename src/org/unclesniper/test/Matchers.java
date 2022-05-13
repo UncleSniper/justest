@@ -22,6 +22,18 @@ import static org.unclesniper.test.TestUtils.notNull;
 
 public class Matchers {
 
+	public static final Matcher<Boolean, Boolean> yay = new EqualMatcher<Boolean>(Boolean.TRUE);
+
+	public static final Matcher<Boolean, Boolean> nay = new EqualMatcher<Boolean>(Boolean.FALSE);
+
+	public static final Matcher<Boolean, Boolean> yes = Matchers.yay;
+
+	public static final Matcher<Boolean, Boolean> no = Matchers.nay;
+
+	public static final Matcher<Boolean, Boolean> trew = Matchers.yay;
+
+	public static final Matcher<Boolean, Boolean> phalse = Matchers.nay;
+
 	private Matchers() {}
 
 	public static <InT, OutT> Matcher<InT, OutT> is(Matcher<InT, OutT> matcher) {
@@ -29,7 +41,7 @@ public class Matchers {
 	}
 
 	public static <SubjectT> Matcher<SubjectT, SubjectT> equalTo(SubjectT expected) {
-		return new EqualMatcher<SubjectT>(expected, false);
+		return new EqualMatcher<SubjectT>(expected);
 	}
 
 	public static <SubjectT> Matcher<SubjectT, SubjectT> notEqualTo(SubjectT unexpected) {
@@ -284,6 +296,30 @@ public class Matchers {
 
 	public static ExceptionMatcher thrownBy(Class<?> clazz, String methodName, boolean inward) {
 		return new ThrownByExceptionMatcher(clazz, methodName, inward);
+	}
+
+	public static Matcher<Boolean, Boolean> yay() {
+		return Matchers.yay;
+	}
+
+	public static Matcher<Boolean, Boolean> nay() {
+		return Matchers.nay;
+	}
+
+	public static Matcher<Boolean, Boolean> yes() {
+		return Matchers.yay;
+	}
+
+	public static Matcher<Boolean, Boolean> no() {
+		return Matchers.nay;
+	}
+
+	public static Matcher<Boolean, Boolean> trew() {
+		return Matchers.yay;
+	}
+
+	public static Matcher<Boolean, Boolean> phalse() {
+		return Matchers.nay;
 	}
 
 }
