@@ -10,6 +10,10 @@ public class PackageFramePredicate implements FramePredicate {
 		this.packageName = packageName;
 	}
 
+	public PackageFramePredicate(Class<?> clazz) {
+		this(PackageFramePredicate.packageOf(clazz));
+	}
+
 	public String getPackageName() {
 		return packageName;
 	}
