@@ -16,6 +16,7 @@ import org.unclesniper.test.matcher.DeepEqualConfigurer;
 import org.unclesniper.test.matcher.TypeExceptionMatcher;
 import org.unclesniper.test.matcher.CauseExceptionMatcher;
 import org.unclesniper.test.matcher.MessageExceptionMatcher;
+import org.unclesniper.test.matcher.ThrownByExceptionMatcher;
 
 import static org.unclesniper.test.TestUtils.notNull;
 
@@ -235,6 +236,54 @@ public class Matchers {
 	public static ExceptionMatcher causedBy(Class<? extends Throwable> causeClass, String causeMessage,
 			ExceptionMatcher... matchers) {
 		return new CauseExceptionMatcher(Matchers.exception(causeClass, causeMessage, matchers));
+	}
+
+	public static ExceptionMatcher thrownBy(String className) {
+		return new ThrownByExceptionMatcher(className);
+	}
+
+	public static ExceptionMatcher thrownWithin(String className) {
+		return new ThrownByExceptionMatcher(className, true);
+	}
+
+	public static ExceptionMatcher thrownBy(String className, String methodName) {
+		return new ThrownByExceptionMatcher(className, methodName);
+	}
+
+	public static ExceptionMatcher thrownWithin(String className, String methodName) {
+		return new ThrownByExceptionMatcher(className, methodName, true);
+	}
+
+	public static ExceptionMatcher thrownBy(Class<?> clazz) {
+		return new ThrownByExceptionMatcher(clazz);
+	}
+
+	public static ExceptionMatcher thrownWithin(Class<?> clazz) {
+		return new ThrownByExceptionMatcher(clazz, true);
+	}
+
+	public static ExceptionMatcher thrownBy(Class<?> clazz, String methodName) {
+		return new ThrownByExceptionMatcher(clazz, methodName);
+	}
+
+	public static ExceptionMatcher thrownWithin(Class<?> clazz, String methodName) {
+		return new ThrownByExceptionMatcher(clazz, methodName, true);
+	}
+
+	public static ExceptionMatcher thrownBy(String className, boolean inward) {
+		return new ThrownByExceptionMatcher(className, inward);
+	}
+
+	public static ExceptionMatcher thrownBy(String className, String methodName, boolean inward) {
+		return new ThrownByExceptionMatcher(className, methodName, inward);
+	}
+
+	public static ExceptionMatcher thrownBy(Class<?> clazz, boolean inward) {
+		return new ThrownByExceptionMatcher(clazz, inward);
+	}
+
+	public static ExceptionMatcher thrownBy(Class<?> clazz, String methodName, boolean inward) {
+		return new ThrownByExceptionMatcher(clazz, methodName, inward);
 	}
 
 }
