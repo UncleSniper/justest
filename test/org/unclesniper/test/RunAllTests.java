@@ -3,15 +3,8 @@ package org.unclesniper.test;
 public class RunAllTests {
 
 	private static final Testable<Void> ALL_TESTS = TestBuilders.testsuite("RunAllTests", RunAllTests::new,
-		TestBuilders.testcase("subtypes", RunAllTests::testSubtypes),
-		TestBuilders.testcase("failure", RunAllTests::testFailure),
-		TestBuilders.testcase("skip", RunAllTests::testSkip),
-		TestBuilders.testcase("failWithStderr", RunAllTests::testFailWithStderr),
-		TestBuilders.testcase("skipWithStdout", RunAllTests::testSkipWithStdout),
-		TestBuilders.testcase("assertInlineEqualYes", RunAllTests::testAssertInlineEqualYes),
-		TestBuilders.testcase("assertInlineEqualNo", RunAllTests::testAssertInlineEqualNo),
-		TestBuilders.testcase("assertFlowEqualYes", RunAllTests::testAssertFlowEqualYes),
-		TestBuilders.testcase("assertFlowEqualNo", RunAllTests::testAssertFlowEqualNo)
+		TestBuilders.testcase("deepEqualYes", RunAllTests::testDeepEqualYes),
+		TestBuilders.testcase("deepEqualNo", RunAllTests::testDeepEqualNo)
 	);
 
 	public static void main(String[] args) throws Exception {
@@ -26,42 +19,16 @@ public class RunAllTests {
 			System.exit(1);
 	}
 
-	private void testSubtypes(TestContext context) {
-		Assert.<SimpleTestsuite<RunAllTests>, Testable<RunAllTests>>assertSubtype();
+	private void testDeepEqualYes() {
+		int[] a = new int[] {1, 2, 3};
+		int[] b = new int[] {1, 2, 3};
+		Assert.assertThat(a).is(Matchers.deepEqualTo(b));
 	}
 
-	private void testFailure() {
-		Assert.fail("failing statically");
-	}
-
-	private void testSkip() {
-		Assume.skip("skipping statically");
-	}
-
-	private void testFailWithStderr() {
-		System.err.println("Failing now!");
-		Assert.fail("dead");
-	}
-
-	private void testSkipWithStdout() {
-		System.out.println("Bailing now!");
-		Assume.skip("sad");
-	}
-
-	private void testAssertInlineEqualYes() {
-		Assert.assertThat(3, Assert.equalTo(3));
-	}
-
-	private void testAssertInlineEqualNo() {
-		Assert.assertThat(3, Assert.equalTo(4));
-	}
-
-	private void testAssertFlowEqualYes() {
-		Assert.assertThat(3).is(Assert.equalTo(3));
-	}
-
-	private void testAssertFlowEqualNo() {
-		Assert.assertThat(3).is(Assert.equalTo(4));
+	private void testDeepEqualNo() {
+		int[] a = new int[] {1, 2, 3};
+		int[] b = new int[] {1, 2, 4};
+		Assert.assertThat(a).is(Matchers.deepEqualTo(b));
 	}
 
 }
