@@ -2,6 +2,7 @@ package org.unclesniper.test.matcher;
 
 import java.util.Comparator;
 import org.unclesniper.test.Matchers;
+import org.unclesniper.test.deepeq.DeepCompareConfig;
 
 import static org.unclesniper.test.TestUtils.notNull;
 
@@ -42,6 +43,22 @@ public class Subject<T> {
 
 	public Subject<T> isNotEqualTo(T unexpected) {
 		return is(Matchers.notEqualTo(unexpected));
+	}
+
+	public Subject<T> isDeepEqualTo(T expected) {
+		return is(Matchers.deepEqualTo(expected));
+	}
+
+	public Subject<T> isDeepEqualTo(T expected, DeepCompareConfig config) {
+		return is(Matchers.deepEqualTo(expected, config));
+	}
+
+	public Subject<T> isNotDeepEqualTo(T expected) {
+		return is(Matchers.notDeepEqualTo(expected));
+	}
+
+	public Subject<T> isNotDeepEqualTo(T expected, DeepCompareConfig config) {
+		return is(Matchers.notDeepEqualTo(expected, config));
 	}
 
 	public Subject<T> isOrderEqualTo(T expected, Comparator<? super T> comparator) {

@@ -8,8 +8,11 @@ import org.unclesniper.test.matcher.ThrowsMatcher;
 import org.unclesniper.test.matcher.CompareMatcher;
 import org.unclesniper.test.matcher.OrderConstraint;
 import org.unclesniper.test.matcher.ExceptionMatcher;
+import org.unclesniper.test.deepeq.DeepCompareConfig;
+import org.unclesniper.test.matcher.DeepEqualMatcher;
 import org.unclesniper.test.matcher.OrExceptionMatcher;
 import org.unclesniper.test.matcher.AndExceptionMatcher;
+import org.unclesniper.test.matcher.DeepEqualConfigurer;
 import org.unclesniper.test.matcher.TypeExceptionMatcher;
 import org.unclesniper.test.matcher.CauseExceptionMatcher;
 import org.unclesniper.test.matcher.MessageExceptionMatcher;
@@ -30,6 +33,24 @@ public class Matchers {
 
 	public static <SubjectT> Matcher<SubjectT, SubjectT> notEqualTo(SubjectT unexpected) {
 		return new EqualMatcher<SubjectT>(unexpected, true);
+	}
+
+	public static <SubjectT> DeepEqualConfigurer<SubjectT> deepEqualTo(SubjectT expected) {
+		return new DeepEqualMatcher<SubjectT>(expected, false);
+	}
+
+	public static <SubjectT> DeepEqualConfigurer<SubjectT> deepEqualTo(SubjectT expected,
+			DeepCompareConfig config) {
+		return new DeepEqualMatcher<SubjectT>(expected, false, config);
+	}
+
+	public static <SubjectT> DeepEqualConfigurer<SubjectT> notDeepEqualTo(SubjectT expected) {
+		return new DeepEqualMatcher<SubjectT>(expected, true);
+	}
+
+	public static <SubjectT> DeepEqualConfigurer<SubjectT> notDeepEqualTo(SubjectT expected,
+			DeepCompareConfig config) {
+		return new DeepEqualMatcher<SubjectT>(expected, true, config);
 	}
 
 	private static <BoundT, SubjectT extends Comparable<? super BoundT>>
