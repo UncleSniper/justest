@@ -109,4 +109,16 @@ public class Subject<T> {
 		return is(new CompareMatcher<T, B>((a, b) -> -b.compareTo(a), bound, OrderConstraint.GREATER_EQUAL));
 	}
 
+	public Subject<T> isOfType(Class<?> expectedType) {
+		return is(Matchers.ofType(expectedType));
+	}
+
+	public Subject<T> isNotOfType(Class<?> expectedType) {
+		return is(Matchers.notOfType(expectedType));
+	}
+
+	public <OutT> Subject<OutT> isOfSubtype(Class<? extends OutT> expectedType) {
+		return is(Matchers.ofSubtype(expectedType));
+	}
+
 }

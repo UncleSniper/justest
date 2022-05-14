@@ -3,9 +3,11 @@ package org.unclesniper.test;
 import java.util.Comparator;
 import java.util.function.ToIntBiFunction;
 import org.unclesniper.test.matcher.Matcher;
+import org.unclesniper.test.matcher.TypeMatcher;
 import org.unclesniper.test.matcher.EqualMatcher;
 import org.unclesniper.test.matcher.ThrowsMatcher;
 import org.unclesniper.test.matcher.CompareMatcher;
+import org.unclesniper.test.matcher.SubtypeMatcher;
 import org.unclesniper.test.matcher.OrderConstraint;
 import org.unclesniper.test.matcher.ExceptionMatcher;
 import org.unclesniper.test.deepeq.DeepCompareConfig;
@@ -320,6 +322,18 @@ public class Matchers {
 
 	public static Matcher<Boolean, Boolean> phalse() {
 		return Matchers.nay;
+	}
+
+	public static <SubjectT> Matcher<SubjectT, SubjectT> ofType(Class<?> expectedType) {
+		return new TypeMatcher<SubjectT>(expectedType);
+	}
+
+	public static <SubjectT> Matcher<SubjectT, SubjectT> notOfType(Class<?> expectedType) {
+		return new TypeMatcher<SubjectT>(expectedType, false);
+	}
+
+	public static <InT, OutT> Matcher<InT, OutT> ofSubtype(Class<? extends OutT> expectedType) {
+		return new SubtypeMatcher<InT, OutT>(expectedType);
 	}
 
 }
