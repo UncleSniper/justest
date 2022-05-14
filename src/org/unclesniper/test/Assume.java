@@ -22,4 +22,28 @@ public class Assume {
 		return new Subject<InT>(actual, true);
 	}
 
+	public static <InT, OutT> Subject<OutT>
+	assumeThat(GenSource<? extends InT> actual, Matcher<? super InT, ? extends OutT> matcher) throws Throwable {
+		notNull(actual, "Actual value generator");
+		notNull(matcher, "Matcher");
+		InT actualValue;
+		try {
+			actualValue = actual.draw();
+		}
+		catch(Throwable t) {
+			throw new DrawAssumptionFailureError(t);
+		}
+		return assumeThat(actualValue, matcher);
+	}
+
+	public static <InT> Subject<InT> assumeThat(GenSource<? extends InT> actual) {
+		notNull(actual, "Actual value generator");
+		try {
+			return new Subject<InT>(actual.draw(), true);
+		}
+		catch(Throwable t) {
+			throw new DrawAssumptionFailureError(t);
+		}
+	}
+
 }
