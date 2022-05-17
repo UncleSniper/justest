@@ -4,6 +4,7 @@ import java.util.Comparator;
 import java.util.function.ToIntBiFunction;
 import org.unclesniper.test.matcher.Matcher;
 import org.unclesniper.test.matcher.TypeMatcher;
+import org.unclesniper.test.matcher.NullMatcher;
 import org.unclesniper.test.matcher.EqualMatcher;
 import org.unclesniper.test.matcher.ThrowsMatcher;
 import org.unclesniper.test.matcher.CompareMatcher;
@@ -19,8 +20,6 @@ import org.unclesniper.test.matcher.TypeExceptionMatcher;
 import org.unclesniper.test.matcher.CauseExceptionMatcher;
 import org.unclesniper.test.matcher.MessageExceptionMatcher;
 import org.unclesniper.test.matcher.ThrownByExceptionMatcher;
-
-import static org.unclesniper.test.TestUtils.notNull;
 
 public class Matchers {
 
@@ -39,7 +38,7 @@ public class Matchers {
 	private Matchers() {}
 
 	public static <InT, OutT> Matcher<InT, OutT> is(Matcher<InT, OutT> matcher) {
-		return notNull(matcher, "Matcher");
+		return TestUtils.notNull(matcher, "Matcher");
 	}
 
 	public static <SubjectT> Matcher<SubjectT, SubjectT> equalTo(SubjectT expected) {
@@ -80,8 +79,8 @@ public class Matchers {
 
 	public static <SubjectT> Matcher<SubjectT, SubjectT> orderEqualTo(SubjectT expected,
 			Comparator<? super SubjectT> comparator) {
-		return new CompareMatcher<SubjectT, SubjectT>(notNull(comparator, "Comparator")::compare, expected,
-				OrderConstraint.EQUAL);
+		return new CompareMatcher<SubjectT, SubjectT>(TestUtils.notNull(comparator, "Comparator")::compare,
+				expected, OrderConstraint.EQUAL);
 	}
 
 	public static <BoundT, SubjectT extends Comparable<? super BoundT>>
@@ -92,8 +91,8 @@ public class Matchers {
 
 	public static <SubjectT> Matcher<SubjectT, SubjectT> orderUnequalTo(SubjectT expected,
 			Comparator<? super SubjectT> comparator) {
-		return new CompareMatcher<SubjectT, SubjectT>(notNull(comparator, "Comparator")::compare, expected,
-				OrderConstraint.UNEQUAL);
+		return new CompareMatcher<SubjectT, SubjectT>(TestUtils.notNull(comparator, "Comparator")::compare,
+				expected, OrderConstraint.UNEQUAL);
 	}
 
 	public static <BoundT, SubjectT extends Comparable<? super BoundT>>
@@ -104,8 +103,8 @@ public class Matchers {
 
 	public static <SubjectT> Matcher<SubjectT, SubjectT> lessThan(SubjectT bound,
 			Comparator<? super SubjectT> comparator) {
-		return new CompareMatcher<SubjectT, SubjectT>(notNull(comparator, "Comparator")::compare, bound,
-				OrderConstraint.LESS);
+		return new CompareMatcher<SubjectT, SubjectT>(TestUtils.notNull(comparator, "Comparator")::compare,
+				bound, OrderConstraint.LESS);
 	}
 
 	public static <BoundT, SubjectT extends Comparable<? super BoundT>>
@@ -116,8 +115,8 @@ public class Matchers {
 
 	public static <SubjectT> Matcher<SubjectT, SubjectT> lessOrEqual(SubjectT bound,
 			Comparator<? super SubjectT> comparator) {
-		return new CompareMatcher<SubjectT, SubjectT>(notNull(comparator, "Comparator")::compare, bound,
-				OrderConstraint.LESS_EQUAL);
+		return new CompareMatcher<SubjectT, SubjectT>(TestUtils.notNull(comparator, "Comparator")::compare,
+				bound, OrderConstraint.LESS_EQUAL);
 	}
 
 	public static <BoundT, SubjectT extends Comparable<? super BoundT>>
@@ -128,8 +127,8 @@ public class Matchers {
 
 	public static <SubjectT> Matcher<SubjectT, SubjectT> greaterThan(SubjectT bound,
 			Comparator<? super SubjectT> comparator) {
-		return new CompareMatcher<SubjectT, SubjectT>(notNull(comparator, "Comparator")::compare, bound,
-				OrderConstraint.GREATER);
+		return new CompareMatcher<SubjectT, SubjectT>(TestUtils.notNull(comparator, "Comparator")::compare,
+				bound, OrderConstraint.GREATER);
 	}
 
 	public static <BoundT, SubjectT extends Comparable<? super BoundT>>
@@ -140,8 +139,8 @@ public class Matchers {
 
 	public static <SubjectT> Matcher<SubjectT, SubjectT> greaterOrEqual(SubjectT bound,
 			Comparator<? super SubjectT> comparator) {
-		return new CompareMatcher<SubjectT, SubjectT>(notNull(comparator, "Comparator")::compare, bound,
-				OrderConstraint.GREATER_EQUAL);
+		return new CompareMatcher<SubjectT, SubjectT>(TestUtils.notNull(comparator, "Comparator")::compare,
+				bound, OrderConstraint.GREATER_EQUAL);
 	}
 
 	public static <BoundT, SubjectT extends Comparable<? super BoundT>>
@@ -334,6 +333,14 @@ public class Matchers {
 
 	public static <InT, OutT> Matcher<InT, OutT> ofSubtype(Class<? extends OutT> expectedType) {
 		return new SubtypeMatcher<InT, OutT>(expectedType);
+	}
+
+	public static <SubjectT> Matcher<SubjectT, SubjectT> nil() {
+		return new NullMatcher<SubjectT>(false);
+	}
+
+	public static <SubjectT> Matcher<SubjectT, SubjectT> notNull() {
+		return new NullMatcher<SubjectT>(true);
 	}
 
 }

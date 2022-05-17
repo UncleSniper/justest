@@ -121,4 +121,12 @@ public class Subject<T> {
 		return is(Matchers.ofSubtype(expectedType));
 	}
 
+	public Subject<T> isNull() {
+		return is(Matchers.nil());
+	}
+
+	public Subject<T> isNotNull() {
+		return is(Matchers.notNull());
+	}
+
 }
