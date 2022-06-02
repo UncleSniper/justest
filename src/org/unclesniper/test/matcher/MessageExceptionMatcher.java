@@ -50,6 +50,7 @@ public class MessageExceptionMatcher<SubjectT extends Throwable> implements Exce
 			return null;
 		StringBuilder builder = new StringBuilder();
 		int old = 0;
+		final int gapLength = MessageExceptionMatcher.GAP_INDICATOR.length();
 		for(;;) {
 			int pos = message.indexOf(MessageExceptionMatcher.GAP_INDICATOR, old);
 			if(pos < 0)
@@ -57,6 +58,7 @@ public class MessageExceptionMatcher<SubjectT extends Throwable> implements Exce
 			if(pos > old)
 				builder.append(Pattern.quote(message.substring(old, pos)));
 			builder.append(".*");
+			old = pos + gapLength;
 		}
 		if(old < message.length())
 			builder.append(Pattern.quote(message.substring(old)));
