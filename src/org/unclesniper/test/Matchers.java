@@ -21,6 +21,7 @@ import org.unclesniper.test.matcher.DeepEqualConfigurer;
 import org.unclesniper.test.matcher.TypeExceptionMatcher;
 import org.unclesniper.test.matcher.CauseExceptionMatcher;
 import org.unclesniper.test.matcher.MessageExceptionMatcher;
+import org.unclesniper.test.matcher.NumericallyCloseMatcher;
 import org.unclesniper.test.matcher.ThrownByExceptionMatcher;
 
 public class Matchers {
@@ -381,7 +382,7 @@ public class Matchers {
 	}
 
 	public static <SubjectT> Matcher<SubjectT, SubjectT> notOfType(Class<?> expectedType) {
-		return new TypeMatcher<SubjectT>(expectedType, false);
+		return new TypeMatcher<SubjectT>(expectedType, true);
 	}
 
 	public static <InT, OutT> Matcher<InT, OutT> ofSubtype(Class<? extends OutT> expectedType) {
@@ -401,7 +402,16 @@ public class Matchers {
 	}
 
 	public static <SubjectT> Matcher<SubjectT, SubjectT> notSameAs(SubjectT expected) {
-		return new SameMatcher<SubjectT>(expected, false);
+		return new SameMatcher<SubjectT>(expected, true);
+	}
+
+	public static <SubjectT extends Number> Matcher<SubjectT, SubjectT> closeTo(Number expected, double epsilon) {
+		return new NumericallyCloseMatcher<SubjectT>(expected, epsilon);
+	}
+
+	public static <SubjectT extends Number> Matcher<SubjectT, SubjectT>
+	notCloseTo(Number expected, double epsilon) {
+		return new NumericallyCloseMatcher<SubjectT>(expected, epsilon, true);
 	}
 
 }
