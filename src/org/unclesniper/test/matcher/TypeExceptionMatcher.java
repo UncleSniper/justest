@@ -4,15 +4,16 @@ import java.util.function.Consumer;
 
 import static org.unclesniper.test.TestUtils.notNull;
 
-public class TypeExceptionMatcher implements ExceptionMatcher {
+public class TypeExceptionMatcher<InT extends Throwable, OutT extends Throwable>
+		implements ExceptionMatcher<InT, OutT> {
 
-	private final Class<? extends Throwable> exceptionClass;
+	private final Class<OutT> exceptionClass;
 
-	public TypeExceptionMatcher(Class<? extends Throwable> exceptionClass) {
+	public TypeExceptionMatcher(Class<OutT> exceptionClass) {
 		this.exceptionClass = notNull(exceptionClass, "Exception class");
 	}
 
-	public Class<? extends Throwable> getExceptionClass() {
+	public Class<OutT> getExceptionClass() {
 		return exceptionClass;
 	}
 

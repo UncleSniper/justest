@@ -4,15 +4,15 @@ import java.util.function.Consumer;
 
 import static org.unclesniper.test.TestUtils.notNull;
 
-public class CauseExceptionMatcher implements ExceptionMatcher {
+public class CauseExceptionMatcher<SubjectT extends Throwable> implements ExceptionMatcher<SubjectT, SubjectT> {
 
-	private final ExceptionMatcher causeMatcher;
+	private final ExceptionMatcher<? extends Throwable, ? extends Throwable> causeMatcher;
 
-	public CauseExceptionMatcher(ExceptionMatcher causeMatcher) {
+	public CauseExceptionMatcher(ExceptionMatcher<? extends Throwable, ? extends Throwable> causeMatcher) {
 		this.causeMatcher = causeMatcher;
 	}
 
-	public ExceptionMatcher getCauseMatcher() {
+	public ExceptionMatcher<? extends Throwable, ? extends Throwable> getCauseMatcher() {
 		return causeMatcher;
 	}
 

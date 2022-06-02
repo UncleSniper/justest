@@ -4,7 +4,7 @@ import java.util.function.Consumer;
 
 import static org.unclesniper.test.TestUtils.notNull;
 
-public class ThrownByExceptionMatcher implements ExceptionMatcher {
+public class ThrownByExceptionMatcher<SubjectT extends Throwable> implements ExceptionMatcher<SubjectT, SubjectT> {
 
 	private final String className;
 
@@ -65,14 +65,14 @@ public class ThrownByExceptionMatcher implements ExceptionMatcher {
 		if(exception == null)
 			return false;
 		StackTraceElement[] trace = exception.getStackTrace();
-		if(trace.length == 0)
-			return false;
-		StackTraceElement top = trace[0];
-		if(!className.equals(top.getClassName()))
-			return false;
-		if(methodName == null)
-			return true;
-		return methodName.equals(top.getMethodName());
+		for(StackTraceElement frame : trace) {
+			if(className.equals(frame.getClassName())
+					&& (methodName == null || methodName.equals(frame.getMethodName())))
+				return true;
+			if(!inward)
+				return false;
+		}
+		return false;
 	}
 
 	@Override

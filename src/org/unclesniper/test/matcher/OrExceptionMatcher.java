@@ -6,13 +6,14 @@ import java.util.function.Consumer;
 
 import static org.unclesniper.test.TestUtils.notNull;
 
-public class OrExceptionMatcher implements ExceptionMatcher {
+public class OrExceptionMatcher<SubjectT extends Throwable> implements ExceptionMatcher<SubjectT, SubjectT> {
 
-	private final List<ExceptionMatcher> matchers = new LinkedList<ExceptionMatcher>();
+	private final List<ExceptionMatcher<? extends Throwable, ? extends Throwable>> matchers
+			= new LinkedList<ExceptionMatcher<? extends Throwable, ? extends Throwable>>();
 
 	public OrExceptionMatcher() {}
 
-	public void addMatcher(ExceptionMatcher matcher) {
+	public void addMatcher(ExceptionMatcher<? extends Throwable, ? extends Throwable> matcher) {
 		if(matcher != null)
 			matchers.add(matcher);
 	}
@@ -23,7 +24,7 @@ public class OrExceptionMatcher implements ExceptionMatcher {
 
 	@Override
 	public boolean isExpectedException(Throwable exception) {
-		for(ExceptionMatcher matcher : matchers) {
+		for(ExceptionMatcher<? extends Throwable, ? extends Throwable> matcher : matchers) {
 			if(matcher.isExpectedException(exception))
 				return true;
 		}
@@ -37,7 +38,7 @@ public class OrExceptionMatcher implements ExceptionMatcher {
 			if(line != null)
 				sink.accept("  " + line);
 		});
-		for(ExceptionMatcher matcher : matchers) {
+		for(ExceptionMatcher<? extends Throwable, ? extends Throwable> matcher : matchers) {
 			subSink.reset();
 			matcher.describeExpectedException(subSink);
 		}

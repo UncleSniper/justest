@@ -4,13 +4,14 @@ import java.util.List;
 import java.util.LinkedList;
 import java.util.function.Consumer;
 
-public class AndExceptionMatcher implements ExceptionMatcher {
+public class AndExceptionMatcher<SubjectT extends Throwable> implements ExceptionMatcher<SubjectT, SubjectT> {
 
-	private final List<ExceptionMatcher> matchers = new LinkedList<ExceptionMatcher>();
+	private final List<ExceptionMatcher<? extends Throwable, ? extends Throwable>> matchers
+			= new LinkedList<ExceptionMatcher<? extends Throwable, ? extends Throwable>>();
 
 	public AndExceptionMatcher() {}
 
-	public void addMatcher(ExceptionMatcher matcher) {
+	public void addMatcher(ExceptionMatcher<? extends Throwable, ? extends Throwable> matcher) {
 		if(matcher != null)
 			matchers.add(matcher);
 	}
@@ -21,7 +22,7 @@ public class AndExceptionMatcher implements ExceptionMatcher {
 
 	@Override
 	public boolean isExpectedException(Throwable exception) {
-		for(ExceptionMatcher matcher : matchers) {
+		for(ExceptionMatcher<? extends Throwable, ? extends Throwable> matcher : matchers) {
 			if(!matcher.isExpectedException(exception))
 				return false;
 		}
@@ -30,7 +31,7 @@ public class AndExceptionMatcher implements ExceptionMatcher {
 
 	@Override
 	public void describeExpectedException(Consumer<String> sink) {
-		for(ExceptionMatcher matcher : matchers)
+		for(ExceptionMatcher<? extends Throwable, ? extends Throwable> matcher : matchers)
 			matcher.describeExpectedException(sink);
 	}
 

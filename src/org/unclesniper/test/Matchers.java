@@ -14,6 +14,7 @@ import org.unclesniper.test.matcher.ExceptionMatcher;
 import org.unclesniper.test.deepeq.DeepCompareConfig;
 import org.unclesniper.test.matcher.DeepEqualMatcher;
 import org.unclesniper.test.matcher.OrExceptionMatcher;
+import org.unclesniper.test.matcher.ThrowsYieldMatcher;
 import org.unclesniper.test.matcher.AndExceptionMatcher;
 import org.unclesniper.test.matcher.DeepEqualConfigurer;
 import org.unclesniper.test.matcher.TypeExceptionMatcher;
@@ -153,19 +154,28 @@ public class Matchers {
 		return new ThrowsMatcher(null);
 	}
 
-	public static Matcher<Executable, Executable> willThrow(ExceptionMatcher... matchers) {
-		AndExceptionMatcher all = new AndExceptionMatcher();
+	@SafeVarargs
+	public static Matcher<Executable, Executable>
+	willThrow(ExceptionMatcher<? extends Throwable, ? extends Throwable>... matchers) {
+		AndExceptionMatcher<Throwable> all = new AndExceptionMatcher<Throwable>();
 		if(matchers != null) {
-			for(ExceptionMatcher matcher : matchers)
+			for(ExceptionMatcher<? extends Throwable, ? extends Throwable> matcher : matchers)
 				all.addMatcher(matcher);
 		}
 		return new ThrowsMatcher(all.isEmpty() ? null : all);
 	}
 
-	public static ExceptionMatcher all(ExceptionMatcher... matchers) {
-		AndExceptionMatcher all = new AndExceptionMatcher();
+	public static <ExceptionT extends Throwable> Matcher<Executable, ExceptionT>
+	willThrowExceptionThat(ExceptionMatcher<? extends Throwable, ? extends ExceptionT> matcher) {
+		return new ThrowsYieldMatcher<ExceptionT>(TestUtils.notNull(matcher, "Exception matcher"));
+	}
+
+	@SafeVarargs
+	public static <ExceptionT extends Throwable> ExceptionMatcher<ExceptionT, ExceptionT>
+	all(ExceptionMatcher<? extends Throwable, ? extends Throwable>... matchers) {
+		AndExceptionMatcher<ExceptionT> all = new AndExceptionMatcher<ExceptionT>();
 		if(matchers != null) {
-			for(ExceptionMatcher matcher : matchers)
+			for(ExceptionMatcher<? extends Throwable, ? extends Throwable> matcher : matchers)
 				all.addMatcher(matcher);
 		}
 		if(all.isEmpty())
@@ -173,10 +183,12 @@ public class Matchers {
 		return all;
 	}
 
-	public static ExceptionMatcher any(ExceptionMatcher... matchers) {
-		OrExceptionMatcher any = new OrExceptionMatcher();
+	@SafeVarargs
+	public static <ExceptionT extends Throwable> ExceptionMatcher<ExceptionT, ExceptionT>
+	any(ExceptionMatcher<? extends Throwable, ? extends Throwable>... matchers) {
+		OrExceptionMatcher<ExceptionT> any = new OrExceptionMatcher<ExceptionT>();
 		if(matchers != null) {
-			for(ExceptionMatcher matcher : matchers)
+			for(ExceptionMatcher<? extends Throwable, ? extends Throwable> matcher : matchers)
 				any.addMatcher(matcher);
 		}
 		if(any.isEmpty())
@@ -184,119 +196,159 @@ public class Matchers {
 		return any;
 	}
 
-	public static ExceptionMatcher exceptionOfType(Class<? extends Throwable> exceptionClass) {
-		return new TypeExceptionMatcher(exceptionClass);
+	public static <InT extends Throwable, ExceptionT extends Throwable> ExceptionMatcher<InT, ExceptionT>
+	exceptionOfType(Class<ExceptionT> exceptionClass) {
+		return new TypeExceptionMatcher<InT, ExceptionT>(exceptionClass);
 	}
 
-	public static ExceptionMatcher exceptionWithMessage(String message) {
-		return new MessageExceptionMatcher(message);
+	public static <ExceptionT extends Throwable> ExceptionMatcher<ExceptionT, ExceptionT>
+	exceptionWithMessage(String message) {
+		return new MessageExceptionMatcher<ExceptionT>(message);
 	}
 
-	public static ExceptionMatcher withoutCause() {
-		return new CauseExceptionMatcher(null);
+	public static <ExceptionT extends Throwable> ExceptionMatcher<ExceptionT, ExceptionT> withoutCause() {
+		return new CauseExceptionMatcher<ExceptionT>(null);
 	}
 
-	public static ExceptionMatcher causedBy(ExceptionMatcher... matchers) {
-		AndExceptionMatcher all = new AndExceptionMatcher();
+	@SafeVarargs
+	public static <ExceptionT extends Throwable> ExceptionMatcher<ExceptionT, ExceptionT>
+	causedBy(ExceptionMatcher<? extends Throwable, ? extends Throwable>... matchers) {
+		AndExceptionMatcher<Throwable> all = new AndExceptionMatcher<Throwable>();
 		if(matchers != null) {
-			for(ExceptionMatcher matcher : matchers)
+			for(ExceptionMatcher<? extends Throwable, ? extends Throwable> matcher : matchers)
 				all.addMatcher(matcher);
 		}
-		return new CauseExceptionMatcher(all.isEmpty() ? null : all);
+		return new CauseExceptionMatcher<ExceptionT>(all.isEmpty() ? null : all);
 	}
 
-	public static ExceptionMatcher exception(Class<? extends Throwable> exceptionClass,
-			ExceptionMatcher... matchers) {
-		AndExceptionMatcher all = new AndExceptionMatcher();
+	@SafeVarargs
+	@SuppressWarnings("unchecked")
+	public static <InT extends Throwable, ExceptionT extends Throwable>
+	ExceptionMatcher<InT, ExceptionT> exception(
+		Class<? extends Throwable> exceptionClass,
+		ExceptionMatcher<? extends Throwable, ? extends Throwable>... matchers
+	) {
+		AndExceptionMatcher<ExceptionT> all = new AndExceptionMatcher<ExceptionT>();
 		all.addMatcher(Matchers.exceptionOfType(exceptionClass));
 		if(matchers != null) {
-			for(ExceptionMatcher matcher : matchers)
+			for(ExceptionMatcher<? extends Throwable, ? extends Throwable> matcher : matchers)
 				all.addMatcher(matcher);
 		}
-		return all;
+		return (ExceptionMatcher)all;
 	}
 
-	public static ExceptionMatcher exception(String message, ExceptionMatcher... matchers) {
-		AndExceptionMatcher all = new AndExceptionMatcher();
+	@SafeVarargs
+	public static <ExceptionT extends Throwable> ExceptionMatcher<ExceptionT, ExceptionT>
+	exception(String message, ExceptionMatcher<? extends Throwable, ? extends Throwable>... matchers) {
+		AndExceptionMatcher<ExceptionT> all = new AndExceptionMatcher<ExceptionT>();
 		all.addMatcher(Matchers.exceptionWithMessage(message));
 		if(matchers != null) {
-			for(ExceptionMatcher matcher : matchers)
+			for(ExceptionMatcher<? extends Throwable, ? extends Throwable> matcher : matchers)
 				all.addMatcher(matcher);
 		}
 		return all;
 	}
 
-	public static ExceptionMatcher exception(Class<? extends Throwable> exceptionClass, String message,
-			ExceptionMatcher... matchers) {
-		AndExceptionMatcher all = new AndExceptionMatcher();
+	@SafeVarargs
+	@SuppressWarnings("unchecked")
+	public static <InT extends Throwable, ExceptionT extends Throwable>
+	ExceptionMatcher<InT, ExceptionT> exception(
+		Class<ExceptionT> exceptionClass,
+		String message,
+		ExceptionMatcher<? extends Throwable, ? extends Throwable>... matchers
+	) {
+		AndExceptionMatcher<ExceptionT> all = new AndExceptionMatcher<ExceptionT>();
 		all.addMatcher(Matchers.exceptionOfType(exceptionClass));
 		all.addMatcher(Matchers.exceptionWithMessage(message));
 		if(matchers != null) {
-			for(ExceptionMatcher matcher : matchers)
+			for(ExceptionMatcher<? extends Throwable, ? extends Throwable> matcher : matchers)
 				all.addMatcher(matcher);
 		}
-		return all;
+		return (ExceptionMatcher)all;
 	}
 
-	public static ExceptionMatcher causedBy(Class<? extends Throwable> causeClass, ExceptionMatcher... matchers) {
-		return new CauseExceptionMatcher(Matchers.exception(causeClass, matchers));
+	@SafeVarargs
+	public static <ExceptionT extends Throwable>
+	ExceptionMatcher<ExceptionT, ExceptionT> causedBy(
+		Class<? extends Throwable> causeClass,
+		ExceptionMatcher<? extends Throwable, ? extends Throwable>... matchers
+	) {
+		return new CauseExceptionMatcher<ExceptionT>(Matchers.exception(causeClass, matchers));
 	}
 
-	public static ExceptionMatcher causedBy(String causeMessage, ExceptionMatcher... matchers) {
-		return new CauseExceptionMatcher(Matchers.exception(causeMessage, matchers));
+	@SafeVarargs
+	public static <ExceptionT extends Throwable> ExceptionMatcher<ExceptionT, ExceptionT>
+	causedBy(String causeMessage, ExceptionMatcher<? extends Throwable, ? extends Throwable>... matchers) {
+		return new CauseExceptionMatcher<ExceptionT>(Matchers.exception(causeMessage, matchers));
 	}
 
-	public static ExceptionMatcher causedBy(Class<? extends Throwable> causeClass, String causeMessage,
-			ExceptionMatcher... matchers) {
-		return new CauseExceptionMatcher(Matchers.exception(causeClass, causeMessage, matchers));
+	@SafeVarargs
+	public static <ExceptionT extends Throwable>
+	ExceptionMatcher<ExceptionT, ExceptionT> causedBy(
+		Class<? extends Throwable> causeClass,
+		String causeMessage,
+		ExceptionMatcher<? extends Throwable, ? extends Throwable>... matchers
+	) {
+		return new CauseExceptionMatcher<ExceptionT>(Matchers.exception(causeClass, causeMessage, matchers));
 	}
 
-	public static ExceptionMatcher thrownBy(String className) {
-		return new ThrownByExceptionMatcher(className);
+	public static <ExceptionT extends Throwable>
+	ExceptionMatcher<ExceptionT, ExceptionT> thrownBy(String className) {
+		return new ThrownByExceptionMatcher<ExceptionT>(className);
 	}
 
-	public static ExceptionMatcher thrownWithin(String className) {
-		return new ThrownByExceptionMatcher(className, true);
+	public static <ExceptionT extends Throwable>
+	ExceptionMatcher<ExceptionT, ExceptionT> thrownWithin(String className) {
+		return new ThrownByExceptionMatcher<ExceptionT>(className, true);
 	}
 
-	public static ExceptionMatcher thrownBy(String className, String methodName) {
-		return new ThrownByExceptionMatcher(className, methodName);
+	public static <ExceptionT extends Throwable>
+	ExceptionMatcher<ExceptionT, ExceptionT> thrownBy(String className, String methodName) {
+		return new ThrownByExceptionMatcher<ExceptionT>(className, methodName);
 	}
 
-	public static ExceptionMatcher thrownWithin(String className, String methodName) {
-		return new ThrownByExceptionMatcher(className, methodName, true);
+	public static <ExceptionT extends Throwable>
+	ExceptionMatcher<ExceptionT, ExceptionT> thrownWithin(String className, String methodName) {
+		return new ThrownByExceptionMatcher<ExceptionT>(className, methodName, true);
 	}
 
-	public static ExceptionMatcher thrownBy(Class<?> clazz) {
-		return new ThrownByExceptionMatcher(clazz);
+	public static <ExceptionT extends Throwable> ExceptionMatcher<ExceptionT, ExceptionT> thrownBy(Class<?> clazz) {
+		return new ThrownByExceptionMatcher<ExceptionT>(clazz);
 	}
 
-	public static ExceptionMatcher thrownWithin(Class<?> clazz) {
-		return new ThrownByExceptionMatcher(clazz, true);
+	public static <ExceptionT extends Throwable>
+	ExceptionMatcher<ExceptionT, ExceptionT> thrownWithin(Class<?> clazz) {
+		return new ThrownByExceptionMatcher<ExceptionT>(clazz, true);
 	}
 
-	public static ExceptionMatcher thrownBy(Class<?> clazz, String methodName) {
-		return new ThrownByExceptionMatcher(clazz, methodName);
+	public static <ExceptionT extends Throwable>
+	ExceptionMatcher<ExceptionT, ExceptionT> thrownBy(Class<?> clazz, String methodName) {
+		return new ThrownByExceptionMatcher<ExceptionT>(clazz, methodName);
 	}
 
-	public static ExceptionMatcher thrownWithin(Class<?> clazz, String methodName) {
-		return new ThrownByExceptionMatcher(clazz, methodName, true);
+	public static <ExceptionT extends Throwable>
+	ExceptionMatcher<ExceptionT, ExceptionT> thrownWithin(Class<?> clazz, String methodName) {
+		return new ThrownByExceptionMatcher<ExceptionT>(clazz, methodName, true);
 	}
 
-	public static ExceptionMatcher thrownBy(String className, boolean inward) {
-		return new ThrownByExceptionMatcher(className, inward);
+	public static <ExceptionT extends Throwable>
+	ExceptionMatcher<ExceptionT, ExceptionT> thrownBy(String className, boolean inward) {
+		return new ThrownByExceptionMatcher<ExceptionT>(className, inward);
 	}
 
-	public static ExceptionMatcher thrownBy(String className, String methodName, boolean inward) {
-		return new ThrownByExceptionMatcher(className, methodName, inward);
+	public static <ExceptionT extends Throwable>
+	ExceptionMatcher<ExceptionT, ExceptionT> thrownBy(String className, String methodName, boolean inward) {
+		return new ThrownByExceptionMatcher<ExceptionT>(className, methodName, inward);
 	}
 
-	public static ExceptionMatcher thrownBy(Class<?> clazz, boolean inward) {
-		return new ThrownByExceptionMatcher(clazz, inward);
+	public static <ExceptionT extends Throwable>
+	ExceptionMatcher<ExceptionT, ExceptionT> thrownBy(Class<?> clazz, boolean inward) {
+		return new ThrownByExceptionMatcher<ExceptionT>(clazz, inward);
 	}
 
-	public static ExceptionMatcher thrownBy(Class<?> clazz, String methodName, boolean inward) {
-		return new ThrownByExceptionMatcher(clazz, methodName, inward);
+	public static <ExceptionT extends Throwable>
+	ExceptionMatcher<ExceptionT, ExceptionT> thrownBy(Class<?> clazz, String methodName, boolean inward) {
+		return new ThrownByExceptionMatcher<ExceptionT>(clazz, methodName, inward);
 	}
 
 	public static Matcher<Boolean, Boolean> yay() {

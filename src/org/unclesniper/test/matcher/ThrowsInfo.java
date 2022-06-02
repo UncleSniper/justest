@@ -7,11 +7,13 @@ public class ThrowsInfo extends AbstractInfo {
 
 	private final Executable executable;
 
-	private final ExceptionMatcher expectedException;
+	private final ExceptionMatcher<? extends Throwable, ? extends Throwable> expectedException;
 
 	private final Throwable thrownException;
 
-	public ThrowsInfo(Executable executable, ExceptionMatcher expectedException, Throwable thrownException) {
+	public ThrowsInfo(Executable executable,
+			ExceptionMatcher<? extends Throwable, ? extends Throwable> expectedException,
+			Throwable thrownException) {
 		this.executable = executable;
 		this.expectedException = expectedException;
 		this.thrownException = thrownException;
@@ -21,7 +23,7 @@ public class ThrowsInfo extends AbstractInfo {
 		return executable;
 	}
 
-	public ExceptionMatcher getExpectedException() {
+	public ExceptionMatcher<? extends Throwable, ? extends Throwable> getExpectedException() {
 		return expectedException;
 	}
 

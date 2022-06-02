@@ -6,13 +6,13 @@ import org.unclesniper.test.AssumptionFailureError;
 
 public class ThrowsMatcher implements Matcher<Executable, Executable> {
 
-	private final ExceptionMatcher expectedException;
+	private final ExceptionMatcher<? extends Throwable, ? extends Throwable> expectedException;
 
-	public ThrowsMatcher(ExceptionMatcher expectedException) {
+	public ThrowsMatcher(ExceptionMatcher<? extends Throwable, ? extends Throwable> expectedException) {
 		this.expectedException = expectedException;
 	}
 
-	public ExceptionMatcher getExpectedException() {
+	public ExceptionMatcher<? extends Throwable, ? extends Throwable> getExpectedException() {
 		return expectedException;
 	}
 

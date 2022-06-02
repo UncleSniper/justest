@@ -5,7 +5,7 @@ import java.util.function.Consumer;
 
 import static org.unclesniper.test.TestUtils.notNull;
 
-public class MessageExceptionMatcher implements ExceptionMatcher {
+public class MessageExceptionMatcher<SubjectT extends Throwable> implements ExceptionMatcher<SubjectT, SubjectT> {
 
 	public static final String GAP_INDICATOR = "<...>";
 
