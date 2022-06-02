@@ -5,6 +5,7 @@ import java.util.function.ToIntBiFunction;
 import org.unclesniper.test.matcher.Matcher;
 import org.unclesniper.test.matcher.TypeMatcher;
 import org.unclesniper.test.matcher.NullMatcher;
+import org.unclesniper.test.matcher.SameMatcher;
 import org.unclesniper.test.matcher.EqualMatcher;
 import org.unclesniper.test.matcher.ThrowsMatcher;
 import org.unclesniper.test.matcher.CompareMatcher;
@@ -393,6 +394,14 @@ public class Matchers {
 
 	public static <SubjectT> Matcher<SubjectT, SubjectT> notNull() {
 		return new NullMatcher<SubjectT>(true);
+	}
+
+	public static <SubjectT> Matcher<SubjectT, SubjectT> sameAs(SubjectT expected) {
+		return new SameMatcher<SubjectT>(expected);
+	}
+
+	public static <SubjectT> Matcher<SubjectT, SubjectT> notSameAs(SubjectT expected) {
+		return new SameMatcher<SubjectT>(expected, false);
 	}
 
 }

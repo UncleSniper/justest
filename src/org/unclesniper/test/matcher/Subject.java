@@ -129,4 +129,12 @@ public class Subject<T> {
 		return is(Matchers.notNull());
 	}
 
+	public Subject<T> isSameAs(T expected) {
+		return is(Matchers.sameAs(expected));
+	}
+
+	public Subject<T> isNotSameAs(T expected) {
+		return is(Matchers.notSameAs(expected));
+	}
+
 }
