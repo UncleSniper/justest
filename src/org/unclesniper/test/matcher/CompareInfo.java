@@ -1,6 +1,7 @@
 package org.unclesniper.test.matcher;
 
 import org.unclesniper.test.TestUtils;
+import org.unclesniper.test.IndentSink;
 
 import static org.unclesniper.test.TestUtils.notNull;
 
@@ -38,7 +39,7 @@ public class CompareInfo extends AbstractInfo {
 	}
 
 	@Override
-	protected void make(Sink sink) {
+	protected void make(IndentSink sink) {
 		sink.append("Expected", false);
 		sink.append(TestUtils.describeObject(actual), true);
 		sink.append("to be " + relation.getHumanSymbol(), false);

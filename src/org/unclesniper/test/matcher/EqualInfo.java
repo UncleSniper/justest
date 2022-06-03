@@ -1,6 +1,7 @@
 package org.unclesniper.test.matcher;
 
 import org.unclesniper.test.TestUtils;
+import org.unclesniper.test.IndentSink;
 import org.unclesniper.test.deepeq.DeepCompareConfig;
 
 public class EqualInfo extends AbstractInfo {
@@ -52,7 +53,7 @@ public class EqualInfo extends AbstractInfo {
 	}
 
 	@Override
-	protected void make(Sink sink) {
+	protected void make(IndentSink sink) {
 		sink.append("Expected", false);
 		sink.append(TestUtils.describeObject(actual), true);
 		if(deep)

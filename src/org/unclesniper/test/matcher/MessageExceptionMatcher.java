@@ -2,6 +2,7 @@ package org.unclesniper.test.matcher;
 
 import java.util.regex.Pattern;
 import java.util.function.Consumer;
+import org.unclesniper.test.IndentSink;
 
 import static org.unclesniper.test.TestUtils.notNull;
 
@@ -42,6 +43,17 @@ public class MessageExceptionMatcher<SubjectT extends Throwable> implements Exce
 		else {
 			sink.accept("- with message:");
 			sink.accept("    " + message);
+		}
+	}
+
+	@Override
+	public void describe(IndentSink sink) {
+		notNull(sink, "Sink");
+		if(message == null)
+			sink.append("to have a null message", false);
+		else {
+			sink.append("to have message:", false);
+			sink.append(message, true);
 		}
 	}
 

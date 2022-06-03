@@ -2,18 +2,13 @@ package org.unclesniper.test.matcher;
 
 import java.util.stream.Stream;
 import java.util.function.Supplier;
+import org.unclesniper.test.IndentSink;
 
 public abstract class AbstractInfo implements Info {
 
-	protected interface Sink {
-
-		void append(String line, boolean indent);
-
-	}
-
 	public AbstractInfo() {}
 
-	protected abstract void make(Sink sink);
+	protected abstract void make(IndentSink sink);
 
 	@Override
 	public String makeMessage() {

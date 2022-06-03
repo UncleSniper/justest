@@ -20,4 +20,9 @@ public interface ExceptionMatcher<InT extends Throwable, OutT extends Throwable>
 			throw new ExceptionAssertionFailureError(info);
 	}
 
+	@Override
+	default boolean matches(InT subject) {
+		return isExpectedException(subject);
+	}
+
 }

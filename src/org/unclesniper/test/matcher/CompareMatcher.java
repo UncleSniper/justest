@@ -1,5 +1,7 @@
 package org.unclesniper.test.matcher;
 
+import org.unclesniper.test.TestUtils;
+import org.unclesniper.test.IndentSink;
 import java.util.function.ToIntBiFunction;
 
 import static org.unclesniper.test.TestUtils.notNull;
@@ -67,6 +69,23 @@ public class CompareMatcher<SubjectT, BoundT> implements Matcher<SubjectT, Subje
 			throw new CompareAssumptionFailureError(info, comparisonException);
 		else
 			throw new CompareAssertionFailureError(info, comparisonException);
+	}
+
+	@Override
+	public boolean matches(SubjectT actual) {
+		try {
+			return relation.isSatisfiedBy(comparator.applyAsInt(actual, bound));
+		}
+		catch(Throwable t) {
+			return false;
+		}
+	}
+
+	@Override
+	public void describe(IndentSink sink) {
+		notNull(sink, "Sink");
+		sink.append("to be " + relation.getHumanSymbol(), false);
+		sink.append(TestUtils.describeObject(bound), true);
 	}
 
 }

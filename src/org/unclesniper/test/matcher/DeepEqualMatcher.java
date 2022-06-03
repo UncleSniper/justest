@@ -1,7 +1,11 @@
 package org.unclesniper.test.matcher;
 
+import org.unclesniper.test.TestUtils;
+import org.unclesniper.test.IndentSink;
 import org.unclesniper.test.deepeq.DeepEquals;
 import org.unclesniper.test.deepeq.DeepCompareConfig;
+
+import static org.unclesniper.test.TestUtils.notNull;
 
 public class DeepEqualMatcher<SubjectT> implements DeepEqualConfigurer<SubjectT> {
 
@@ -52,6 +56,18 @@ public class DeepEqualMatcher<SubjectT> implements DeepEqualConfigurer<SubjectT>
 			throw new EqualAssumptionFailureError(info);
 		else
 			throw new EqualAssertionFailureError(info);
+	}
+
+	@Override
+	public boolean matches(SubjectT actual) {
+		return DeepEquals.deepEquals(actual, expected, config) != negated;
+	}
+
+	@Override
+	public void describe(IndentSink sink) {
+		notNull(sink, "Sink");
+		sink.append(negated ? "to be deep-unequal to" : "to be deep-equal to", false);
+		sink.append(TestUtils.describeObject(expected), true);
 	}
 
 }

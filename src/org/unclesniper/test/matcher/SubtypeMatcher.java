@@ -1,5 +1,7 @@
 package org.unclesniper.test.matcher;
 
+import org.unclesniper.test.IndentSink;
+
 import static org.unclesniper.test.TestUtils.notNull;
 
 public class SubtypeMatcher<InT, OutT> implements Matcher<InT, OutT> {
@@ -23,6 +25,18 @@ public class SubtypeMatcher<InT, OutT> implements Matcher<InT, OutT> {
 			throw new TypeAssumptionFailureError(info);
 		else
 			throw new TypeAssertionFailureError(info);
+	}
+
+	@Override
+	public boolean matches(InT actual) {
+		return expectedType.isInstance(actual);
+	}
+
+	@Override
+	public void describe(IndentSink sink) {
+		notNull(sink, "Sink");
+		sink.append("to be of type", false);
+		sink.append(expectedType.getName(), true);
 	}
 
 }

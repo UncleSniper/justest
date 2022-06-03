@@ -1,5 +1,7 @@
 package org.unclesniper.test.matcher;
 
+import org.unclesniper.test.IndentSink;
+
 import static org.unclesniper.test.TestUtils.notNull;
 
 public class NumericallyCloseInfo extends AbstractInfo {
@@ -36,7 +38,7 @@ public class NumericallyCloseInfo extends AbstractInfo {
 	}
 
 	@Override
-	protected void make(Sink sink) {
+	protected void make(IndentSink sink) {
 		sink.append("Expected", false);
 		sink.append(actual == null ? "<null>" : actual.toString(), true);
 		sink.append("to be within", false);

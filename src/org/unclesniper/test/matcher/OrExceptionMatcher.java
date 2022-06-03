@@ -3,6 +3,8 @@ package org.unclesniper.test.matcher;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.function.Consumer;
+import org.unclesniper.test.IndentSink;
+import org.unclesniper.test.BulletIndentSink;
 
 import static org.unclesniper.test.TestUtils.notNull;
 
@@ -41,6 +43,16 @@ public class OrExceptionMatcher<SubjectT extends Throwable> implements Exception
 		for(ExceptionMatcher<? extends Throwable, ? extends Throwable> matcher : matchers) {
 			subSink.reset();
 			matcher.describeExpectedException(subSink);
+		}
+	}
+
+	@Override
+	public void describe(IndentSink sink) {
+		BulletIndentSink bullet = new BulletIndentSink(sink, false);
+		sink.append("to satisfy any of the following:", false);
+		for(ExceptionMatcher<? extends Throwable, ? extends Throwable> matcher : matchers) {
+			bullet.reset();
+			matcher.describe(bullet);
 		}
 	}
 

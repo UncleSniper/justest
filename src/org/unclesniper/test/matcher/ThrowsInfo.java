@@ -2,6 +2,7 @@ package org.unclesniper.test.matcher;
 
 import org.unclesniper.test.TestUtils;
 import org.unclesniper.test.Executable;
+import org.unclesniper.test.IndentSink;
 
 public class ThrowsInfo extends AbstractInfo {
 
@@ -32,7 +33,7 @@ public class ThrowsInfo extends AbstractInfo {
 	}
 
 	@Override
-	protected void make(Sink sink) {
+	protected void make(IndentSink sink) {
 		sink.append("Expected executable", false);
 		sink.append(TestUtils.describeObject(executable), true);
 		if(expectedException == null)

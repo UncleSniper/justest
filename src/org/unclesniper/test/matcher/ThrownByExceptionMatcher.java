@@ -1,6 +1,7 @@
 package org.unclesniper.test.matcher;
 
 import java.util.function.Consumer;
+import org.unclesniper.test.IndentSink;
 
 import static org.unclesniper.test.TestUtils.notNull;
 
@@ -79,6 +80,13 @@ public class ThrownByExceptionMatcher<SubjectT extends Throwable> implements Exc
 	public void describeExpectedException(Consumer<String> sink) {
 		notNull(sink, "Sink").accept("- thrown " + (inward ? "somewhere" : "directly") + " in:");
 		sink.accept("    class " + className + (methodName == null ? "" : ", method " + methodName));
+	}
+
+	@Override
+	public void describe(IndentSink sink) {
+		notNull(sink, "Sink");
+		sink.append("to have been thrown " + (inward ? "somewhere" : "directly") + " in:", false);
+		sink.append("class " + className + (methodName == null ? "" : ", method " + methodName), true);
 	}
 
 }

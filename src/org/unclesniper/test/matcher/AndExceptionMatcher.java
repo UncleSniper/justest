@@ -3,6 +3,8 @@ package org.unclesniper.test.matcher;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.function.Consumer;
+import org.unclesniper.test.IndentSink;
+import org.unclesniper.test.BulletIndentSink;
 
 public class AndExceptionMatcher<SubjectT extends Throwable> implements ExceptionMatcher<SubjectT, SubjectT> {
 
@@ -33,6 +35,16 @@ public class AndExceptionMatcher<SubjectT extends Throwable> implements Exceptio
 	public void describeExpectedException(Consumer<String> sink) {
 		for(ExceptionMatcher<? extends Throwable, ? extends Throwable> matcher : matchers)
 			matcher.describeExpectedException(sink);
+	}
+
+	@Override
+	public void describe(IndentSink sink) {
+		BulletIndentSink bullet = new BulletIndentSink(sink, false);
+		sink.append("to satisfy all of the following:", false);
+		for(ExceptionMatcher<? extends Throwable, ? extends Throwable> matcher : matchers) {
+			bullet.reset();
+			matcher.describe(bullet);
+		}
 	}
 
 }

@@ -1,5 +1,7 @@
 package org.unclesniper.test.matcher;
 
+import org.unclesniper.test.IndentSink;
+
 import static org.unclesniper.test.TestUtils.notNull;
 
 public class NumericallyCloseMatcher<SubjectT extends Number> implements Matcher<SubjectT, SubjectT> {
@@ -44,6 +46,23 @@ public class NumericallyCloseMatcher<SubjectT extends Number> implements Matcher
 			throw new NumericallyCloseAssumptionFailureError(info);
 		else
 			throw new NumericallyCloseAssertionFailureError(info);
+	}
+
+	@Override
+	public boolean matches(SubjectT actual) {
+		double ex = expected.doubleValue();
+		double ac = actual == null ? 0.0 : actual.doubleValue();
+		double eps = Math.abs(epsilon);
+		return actual != null && (Math.abs(ex - ac) <= eps) != negated;
+	}
+
+	@Override
+	public void describe(IndentSink sink) {
+		notNull(sink, "Sink");
+		sink.append("to be within", false);
+		sink.append(String.valueOf(epsilon), true);
+		sink.append("of", false);
+		sink.append(expected.toString(), true);
 	}
 
 }
