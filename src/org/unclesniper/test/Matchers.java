@@ -1,6 +1,7 @@
 package org.unclesniper.test;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.Comparator;
 import java.util.Collection;
 import java.util.function.ToIntBiFunction;
@@ -8,6 +9,7 @@ import org.unclesniper.test.matcher.Matcher;
 import org.unclesniper.test.matcher.TypeMatcher;
 import org.unclesniper.test.matcher.NullMatcher;
 import org.unclesniper.test.matcher.SameMatcher;
+import org.unclesniper.test.matcher.NoneMatcher;
 import org.unclesniper.test.matcher.EqualMatcher;
 import org.unclesniper.test.matcher.ThrowsMatcher;
 import org.unclesniper.test.matcher.CompareMatcher;
@@ -425,6 +427,10 @@ public class Matchers {
 	public static <KeyT, ValueT, MapT extends Map<KeyT, ValueT>> Matcher<MapT, MapT>
 	mapHasSize(Matcher<? super Integer, ?> sizeMatcher) {
 		return new CollectionSizeMatcher<MapT>(Map::size, sizeMatcher);
+	}
+
+	public static <ElementT> Matcher<Optional<ElementT>, Optional<ElementT>> none() {
+		return new NoneMatcher<ElementT>();
 	}
 
 }
