@@ -10,6 +10,7 @@ import org.unclesniper.test.matcher.TypeMatcher;
 import org.unclesniper.test.matcher.NullMatcher;
 import org.unclesniper.test.matcher.SameMatcher;
 import org.unclesniper.test.matcher.NoneMatcher;
+import org.unclesniper.test.matcher.JustMatcher;
 import org.unclesniper.test.matcher.EqualMatcher;
 import org.unclesniper.test.matcher.ThrowsMatcher;
 import org.unclesniper.test.matcher.CompareMatcher;
@@ -431,6 +432,15 @@ public class Matchers {
 
 	public static <ElementT> Matcher<Optional<ElementT>, Optional<ElementT>> none() {
 		return new NoneMatcher<ElementT>();
+	}
+
+	public static <ElementT> Matcher<Optional<ElementT>, ElementT> just() {
+		return new JustMatcher<ElementT>(null);
+	}
+
+	public static <ElementT> Matcher<Optional<ElementT>, ElementT>
+	just(Matcher<? super ElementT, ?> elementMatcher) {
+		return new JustMatcher<ElementT>(TestUtils.notNull(elementMatcher, "Element matcher"));
 	}
 
 }
