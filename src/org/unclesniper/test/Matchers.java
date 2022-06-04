@@ -1,6 +1,8 @@
 package org.unclesniper.test;
 
+import java.util.Map;
 import java.util.Comparator;
+import java.util.Collection;
 import java.util.function.ToIntBiFunction;
 import org.unclesniper.test.matcher.Matcher;
 import org.unclesniper.test.matcher.TypeMatcher;
@@ -20,6 +22,7 @@ import org.unclesniper.test.matcher.AndExceptionMatcher;
 import org.unclesniper.test.matcher.DeepEqualConfigurer;
 import org.unclesniper.test.matcher.TypeExceptionMatcher;
 import org.unclesniper.test.matcher.CauseExceptionMatcher;
+import org.unclesniper.test.matcher.CollectionSizeMatcher;
 import org.unclesniper.test.matcher.MessageExceptionMatcher;
 import org.unclesniper.test.matcher.NumericallyCloseMatcher;
 import org.unclesniper.test.matcher.ThrownByExceptionMatcher;
@@ -412,6 +415,16 @@ public class Matchers {
 	public static <SubjectT extends Number> Matcher<SubjectT, SubjectT>
 	notCloseTo(Number expected, double epsilon) {
 		return new NumericallyCloseMatcher<SubjectT>(expected, epsilon, true);
+	}
+
+	public static <ElementT, CollectionT extends Collection<ElementT>> Matcher<CollectionT, CollectionT>
+	hasSize(Matcher<? super Integer, ?> sizeMatcher) {
+		return new CollectionSizeMatcher<CollectionT>(Collection::size, sizeMatcher);
+	}
+
+	public static <KeyT, ValueT, MapT extends Map<KeyT, ValueT>> Matcher<MapT, MapT>
+	mapHasSize(Matcher<? super Integer, ?> sizeMatcher) {
+		return new CollectionSizeMatcher<MapT>(Map::size, sizeMatcher);
 	}
 
 }
