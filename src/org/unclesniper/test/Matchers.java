@@ -6,6 +6,8 @@ import java.util.Comparator;
 import java.util.Collection;
 import java.util.function.ToIntBiFunction;
 import org.unclesniper.test.matcher.Matcher;
+import org.unclesniper.test.matcher.OrMatcher;
+import org.unclesniper.test.matcher.AndMatcher;
 import org.unclesniper.test.matcher.TypeMatcher;
 import org.unclesniper.test.matcher.NullMatcher;
 import org.unclesniper.test.matcher.SameMatcher;
@@ -441,6 +443,26 @@ public class Matchers {
 	public static <ElementT> Matcher<Optional<ElementT>, ElementT>
 	just(Matcher<? super ElementT, ?> elementMatcher) {
 		return new JustMatcher<ElementT>(TestUtils.notNull(elementMatcher, "Element matcher"));
+	}
+
+	@SafeVarargs
+	public static <SubjectT> Matcher<SubjectT, SubjectT> allOf(Matcher<? super SubjectT, ?>... matchers) {
+		AndMatcher<SubjectT> all = new AndMatcher<SubjectT>();
+		if(matchers != null) {
+			for(Matcher<? super SubjectT, ?> matcher : matchers)
+				all.addMatcher(matcher);
+		}
+		return all;
+	}
+
+	@SafeVarargs
+	public static <SubjectT> Matcher<SubjectT, SubjectT> anyOf(Matcher<? super SubjectT, ?>... matchers) {
+		OrMatcher<SubjectT> any = new OrMatcher<SubjectT>();
+		if(matchers != null) {
+			for(Matcher<? super SubjectT, ?> matcher : matchers)
+				any.addMatcher(matcher);
+		}
+		return any;
 	}
 
 }
