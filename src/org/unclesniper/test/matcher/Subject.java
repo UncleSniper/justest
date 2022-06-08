@@ -1,6 +1,7 @@
 package org.unclesniper.test.matcher;
 
 import java.util.Comparator;
+import java.util.function.Function;
 import org.unclesniper.test.Matchers;
 import org.unclesniper.test.deepeq.DeepCompareConfig;
 
@@ -35,6 +36,10 @@ public class Subject<T> {
 
 	public <OutT> Subject<OutT> andThat(Matcher<? super T, ? extends OutT> matcher) {
 		return is(matcher);
+	}
+
+	public <OutT> Subject<OutT> map(Function<? super T, ? extends OutT> transform) {
+		return new Subject<OutT>(notNull(transform, "Transform").apply(subject), assume);
 	}
 
 	public Subject<T> isEqualTo(T expected) {
