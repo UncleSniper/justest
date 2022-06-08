@@ -10,4 +10,12 @@ public interface Matcher<InT, OutT> {
 
 	void describe(IndentSink sink);
 
+	default <UltimateT> Matcher<InT, UltimateT> that(Matcher<? super OutT, ? extends UltimateT> outerMatcher) {
+		return new ChainMatcher<InT, OutT, UltimateT>(this, outerMatcher);
+	}
+
+	default <UltimateT> Matcher<InT, UltimateT> andThat(Matcher<? super OutT, ? extends UltimateT> outerMatcher) {
+		return this.that(outerMatcher);
+	}
+
 }
