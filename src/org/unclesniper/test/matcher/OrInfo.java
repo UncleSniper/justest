@@ -43,7 +43,10 @@ public class OrInfo extends AbstractInfo {
 			if(lines == null)
 				continue;
 			bullet.reset();
-			lines.forEach(line -> bullet.append(line, false));
+			lines.forEach(line -> {
+				if(line != null)
+					bullet.append(line, false);
+			});
 		}
 	}
 

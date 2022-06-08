@@ -18,6 +18,8 @@ import org.unclesniper.test.matcher.ThrowsMatcher;
 import org.unclesniper.test.matcher.CompareMatcher;
 import org.unclesniper.test.matcher.SubtypeMatcher;
 import org.unclesniper.test.matcher.OrderConstraint;
+import org.unclesniper.test.matcher.PropertyMatcher;
+import org.unclesniper.test.matcher.IdentityMatcher;
 import org.unclesniper.test.matcher.ExceptionMatcher;
 import org.unclesniper.test.deepeq.DeepCompareConfig;
 import org.unclesniper.test.matcher.DeepEqualMatcher;
@@ -31,6 +33,7 @@ import org.unclesniper.test.matcher.CollectionSizeMatcher;
 import org.unclesniper.test.matcher.MessageExceptionMatcher;
 import org.unclesniper.test.matcher.NumericallyCloseMatcher;
 import org.unclesniper.test.matcher.ThrownByExceptionMatcher;
+import org.unclesniper.test.matcher.PropertyExtractingMatcher;
 
 public class Matchers {
 
@@ -463,6 +466,47 @@ public class Matchers {
 				any.addMatcher(matcher);
 		}
 		return any;
+	}
+
+	public static <BaseT, PropertyT> Matcher<BaseT, BaseT> property(
+		String propertyName,
+		Transform<? super BaseT, ? extends PropertyT> property,
+		Matcher<? super PropertyT, ?> propertyMatcher
+	) {
+		return new PropertyMatcher<BaseT, PropertyT>(property, propertyName, propertyMatcher);
+	}
+
+	public static <BaseT, PropertyT> Matcher<BaseT, BaseT> property(
+		Transform<? super BaseT, ? extends PropertyT> property,
+		Matcher<? super PropertyT, ?> propertyMatcher
+	) {
+		return Matchers.property(null, property, propertyMatcher);
+	}
+
+	public static <BaseT, PropertyT, OutT> Matcher<BaseT, OutT> hasProperty(
+		String propertyName,
+		Transform<? super BaseT, ? extends PropertyT> property,
+		Matcher<? super PropertyT, ? extends OutT> propertyMatcher
+	) {
+		return new PropertyExtractingMatcher<BaseT, PropertyT, OutT>(property, propertyName, propertyMatcher);
+	}
+
+	public static <BaseT, PropertyT, OutT> Matcher<BaseT, OutT> hasProperty(
+		Transform<? super BaseT, ? extends PropertyT> property,
+		Matcher<? super PropertyT, ? extends OutT> propertyMatcher
+	) {
+		return Matchers.hasProperty(null, property, propertyMatcher);
+	}
+
+	public static <BaseT, PropertyT> Matcher<BaseT, PropertyT>
+	hasProperty(String propertyName, Transform<? super BaseT, ? extends PropertyT> property) {
+		return new PropertyExtractingMatcher<BaseT, PropertyT, PropertyT>(property, propertyName,
+				new IdentityMatcher<PropertyT>());
+	}
+
+	public static <BaseT, PropertyT> Matcher<BaseT, PropertyT>
+	hasProperty(Transform<? super BaseT, ? extends PropertyT> property) {
+		return Matchers.hasProperty(null, property);
 	}
 
 }
