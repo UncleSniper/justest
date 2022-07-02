@@ -689,4 +689,14 @@ public class TestBuilders {
 
 	// ==== end testcase()
 
+	@SafeVarargs
+	public static <BaseT> Testable<BaseT> tests(Testable<? super BaseT>... tests) {
+		MultiTestable<BaseT> all = new MultiTestable<BaseT>();
+		if(tests != null) {
+			for(Testable<? super BaseT> test : tests)
+				all.addTest(test);
+		}
+		return all;
+	}
+
 }
