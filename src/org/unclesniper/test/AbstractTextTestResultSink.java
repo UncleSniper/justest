@@ -98,6 +98,7 @@ public abstract class AbstractTextTestResultSink implements TestResultSink {
 				indent(indentLevel);
 				AbstractTextTestResultSink.this.puts(banner);
 				AbstractTextTestResultSink.this.endln();
+				banner = null;
 			}
 			indent(indentLevel);
 			if(lineInitiator != null) {
