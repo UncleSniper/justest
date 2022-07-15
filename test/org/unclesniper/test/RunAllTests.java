@@ -2,9 +2,11 @@ package org.unclesniper.test;
 
 public class RunAllTests {
 
-	private static final Testable<Void> ALL_TESTS = TestBuilders.testsuite("RunAllTests", RunAllTests::new,
-		TestBuilders.testcase("deepEqualYes", RunAllTests::testDeepEqualYes),
-		TestBuilders.testcase("deepEqualNo", RunAllTests::testDeepEqualNo)
+	private static final Testable<Void> ALL_TESTS = TestBuilders.tests(
+		TestBuilders.testsuite("RunAllTests", RunAllTests::new
+			//TODO
+		),
+		LineSplitterTests.TESTSUITE
 	);
 
 	public static void main(String[] args) throws Exception {
@@ -20,18 +22,6 @@ public class RunAllTests {
 		Testable.run(null, sink, RunAllTests.ALL_TESTS);
 		if(sink.getFailedCases() > 0)
 			System.exit(1);
-	}
-
-	private void testDeepEqualYes() {
-		int[] a = new int[] {1, 2, 3};
-		int[] b = new int[] {1, 2, 3};
-		Assert.assertThat(a).is(Matchers.deepEqualTo(b));
-	}
-
-	private void testDeepEqualNo() {
-		int[] a = new int[] {1, 2, 3};
-		int[] b = new int[] {1, 2, 4};
-		Assert.assertThat(a).is(Matchers.deepEqualTo(b));
 	}
 
 }
