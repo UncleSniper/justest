@@ -39,7 +39,11 @@ public class LineSplitter {
 					return i - start;
 			}
 		}
-		return hadCarriageReturn && start < end ? end - start - 1 : -1;
+		if(hadCarriageReturn && start < end) {
+			skip = 1;
+			return end - start - 1;
+		}
+		return -1;
 	}
 
 	public int split(String str, int offset) {
@@ -62,6 +66,13 @@ public class LineSplitter {
 		if(end > size)
 			throw new IllegalArgumentException("End of range must not exceed array size: " + end + " > " + size);
 		return split(index -> chars[index], offset, end);
+	}
+
+	public boolean end() {
+		if(!hadCarriageReturn)
+			return false;
+		hadCarriageReturn = false;
+		return true;
 	}
 
 }

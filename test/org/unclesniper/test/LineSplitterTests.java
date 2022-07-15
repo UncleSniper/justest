@@ -96,6 +96,8 @@ public class LineSplitterTests {
 					prescribedStart = piece.offset + addCount + skip;
 				}
 				assertThat(prescribedStart).is(equalTo(input.length()));
+				if(splitter.end())
+					gotPieces.add("");
 				assertThat(gotPieces.size()).is(equalTo(expected.length));
 				for(int i = 0; i < expected.length; ++i)
 					assertThat(gotPieces.get(i)).is(equalTo(expected[i]));
@@ -134,7 +136,15 @@ public class LineSplitterTests {
 			tcase("foo\n", pieces(
 				piece(0, 4),
 				piece(4, 0)
-			), expect("foo", ""))
+			), expect("foo", "")),
+			tcase("foo\r", pieces(
+				piece(0, 4)
+			), expect("foo", "")),
+			tcase("foo\r\nbar", pieces(
+				piece(0, 4),
+				piece(4, 1),
+				piece(5, 3)
+			), expect("foo", "", "bar"))
 		))
 			tcase.performTest();
 	}
